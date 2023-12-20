@@ -165,10 +165,7 @@
         <div class="formitem">
           <el-form-item label="本人及家庭成员工作地是否购买或承租保障性住房：">
             <el-input :value="isTrue[houselist.existPurchase]"></el-input>
-          </el-form-item>
-          <el-form-item label="工作地是否获得产权住房：">
-            <el-input></el-input>
-          </el-form-item>
+          </el-form-item> 
         </div>
         <div class="formitem">
           <el-form-item label="申请说明">
@@ -179,6 +176,34 @@
           <el-form-item label="备注">
             <el-input type="textarea" :value="houselist.notes"></el-input>
           </el-form-item>
+        </div>
+        <div
+          :style="{
+            width: '100%',
+          }"
+        >
+          <el-table
+            border
+            v-if="this.houselist.marriageCode !== 0"
+            :data="this.houselist.marriageProveList"
+            style="width: 200px"
+          >
+            <el-table-column label="附件">
+              <div slot-scope="scope">
+                {{ slice(scope.row) }}
+              </div>
+            </el-table-column>
+            <el-table-column label="操作">
+              <div slot-scope="scope">
+                <el-button
+                  type="text"
+                  @click="down(scope.row)"
+                  :disabled="false"
+                  >下载附件</el-button
+                >
+              </div>
+            </el-table-column>
+          </el-table>
         </div>
       </el-form>
     </div>
@@ -410,72 +435,89 @@
           <el-button
             :type="colortype[item.status]"
             style="font-size: 18px"
-            @click="openNode(item)"
+            @click="nodelog = !nodelog"
           >
             <div>{{ item.title }}</div>
             <div>{{ type[item.status] }}</div>
           </el-button>
+          <div
+            v-if="item.history && nodelog"
+            :style="{
+              width: '100%',
+            }"
+          >
+            <div
+              class="nodeboxchildren"
+              v-for="subitem in item.history"
+              :key="subitem.id"
+            >
+              <el-button
+                :type="
+                  subitem.examineApprove === 0
+                    ? 'success'
+                    : 'danger' && subitem.examineApprove === 1
+                    ? 'danger'
+                    : 'warning'
+                "
+              >
+                <div
+                  class="title"
+                  :style="{
+                    fontSize: '16px',
+                  }"
+                >
+                  审核人
+                </div>
+                <div
+                  class="option"
+                  :style="{
+                    fontSize: '16px',
+                  }"
+                >
+                  {{
+                    subitem.examineApprove === 0
+                      ? "通过"
+                      : "不通过" && subitem.examineApprove === 1
+                      ? "不通过"
+                      : "处理"
+                  }}
+                </div>
+                <div
+                  class="time"
+                  v-if="subitem.opinion"
+                  :style="{
+                    fontSize: '16px',
+                  }"
+                >
+                  <el-input
+                    v-model="subitem.opinion"
+                    type="textarea"
+                    :autosize="{ minRows: 1, maxRows: 5 }"
+                    disabled
+                  ></el-input>
+                </div>
+                <div
+                  class="time"
+                  :style="{
+                    fontSize: '16px',
+                  }"
+                >
+                  {{ subitem.createTime }}
+                </div>
+              </el-button>
+            </div>
+          </div>
         </div>
       </div>
+
       <span slot="footer" class="dialog-footer">
         <el-button size="small" type="danger" @click="historylog = false">
           关闭</el-button
         >
       </span>
     </el-dialog>
-    <el-dialog :title="nodechilren.title" width="30%" :visible.sync="nodelog">
-      <div class="nodebox" v-for="item in nodechilren.history" :key="item.id">
-        <el-button
-          :type="
-            item.examineApprove === 0
-              ? 'success'
-              : 'danger' && item.examineApprove === 1
-              ? 'danger'
-              : 'warning'
-          "
-        >
-          <div
-            class="title"
-            :style="{
-              fontSize: '16px',
-            }"
-          >
-            审核人
-          </div>
-          <div
-            class="option"
-            :style="{
-              fontSize: '16px',
-            }"
-          >
-            {{
-              item.examineApprove === 0
-                ? "通过"
-                : "不通过" && item.examineApprove === 1
-                ? "不通过"
-                : "处理"
-            }}
-          </div>
-          <div
-            class="time"
-            v-if="item.opinion"
-            :style="{
-              fontSize: '16px',
-            }"
-          >
-            {{ "审核意见:" + item.opinion }}
-          </div>
-          <div
-            class="time"
-            :style="{
-              fontSize: '16px',
-            }"
-          >
-            {{ item.createTime }}
-          </div>
-        </el-button>
-      </div>
-    </el-dialog>
+    <!-- <el-dialog :title="nodechilren.title" width="30%" :visible.sync="nodelog">
+    </el-dialog> -->
   </div>
 </template>
 
@@ -540,6 +582,7 @@ export default {
         1: "审核通过",
         2: "经办人处理中",
         3: "审核不通过",
+        4: "审核不通过",
         5: "部门领导复审通过",
       },
       colortype: {
@@ -547,6 +590,7 @@ export default {
         1: "success",
         2: "warning",
         3: "danger",
+        4: "danger",
         5: "success",
       },
       prop: {
@@ -557,7 +601,7 @@ export default {
       houseform: {},
       nodechilren: [],
       deptlist: [],
-      nodelog: false,
+      nodelog: true,
       deptUser: [],
       historylog: false,
       value: {},
@@ -837,14 +881,14 @@ export default {
         });
     },
     slice(row) {
-      console.log(row, 'row');
-      const index = row.lastIndexOf("/") ;
+      console.log(row, "row");
+      const index = row.lastIndexOf("/");
       const text = row.substr(index + 1);
-      console.log(text, 'row');
+      console.log(text, "row");
       return text;
     },
     down(row) {
-      getModle(row.name);
+      getModle(row.name || row);
     },
     //驳回
     nodeBack(data) {
@@ -969,6 +1013,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     ::v-deep .el-form--inline .el-form-item {
       display: flex;
     }
@@ -1015,6 +1060,7 @@ export default {
         .el-form-item {
           display: flex;
           margin-right: 5px;
+          align-items: flex-end;
           .el-input,
           .el-select {
             width: 350px;
@@ -1086,7 +1132,8 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      .flowNode {
+      .flowNode,
+      .nodeboxchildren {
         width: 80%;
         padding: 5px;
         display: flex;
@@ -1094,7 +1141,23 @@ export default {
         align-items: center;
 
         .el-button {
-          width: 70%;
+          width: 90%;
+        }
+      }
+      .nodeboxchildren {
+        width: 100%;
+        opacity: 0.8;
+        .el-button {
+          width: 80%;
+        }
+        .time {
+          ::v-deep .el-textarea__inner {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 400;
+          }
         }
       }
     }

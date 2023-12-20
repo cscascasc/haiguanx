@@ -416,11 +416,80 @@
           <el-button
             :type="colortype[item.status]"
             style="font-size: 18px"
-            @click="openNode(item)"
+            @click="nodelog = !nodelog"
           >
             <div>{{ item.title }}</div>
             <div>{{ type[item.status] }}</div>
           </el-button>
+          <div
+            class="nodeboxchildren"
+            v-if="item.history && nodelog"
+            v-for="subitem in item.history"
+            :key="subitem"
+          >
+            <el-button :type="nodeColor[subitem.examineApprove]">
+              <div
+                class="title"
+                :style="{
+                  fontSize: '16px',
+                  marginTop: '2px',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }"
+              >
+                {{
+                  subitem.userName
+                    ? subitem.userName + `(${item.deptList[0].splitDept})`
+                    : "审核人"
+                }}
+              </div>
+              <div
+                class="option"
+                :style="{
+                  fontSize: '16px',
+                  marginTop: '2px',
+                }"
+              >
+                {{
+                  "审核意见" + status[subitem.examineApprove]
+                    ? status[subitem.examineApprove]
+                    : ""
+                }}
+              </div>
+              <div
+                class="time"
+                v-if="subitem.opinion"
+                :style="{
+                  fontSize: '16px',
+                }"
+              >
+                <el-input
+                  type="textarea"
+                  v-model="subitem.opinion"
+                  :autosize="{ minRows: 1, maxRows: 5 }"
+                  disabled
+                ></el-input>
+                <!-- {{ "说明:" + subitem.opinion }} -->
+              </div>
+              <div
+                class="time"
+                v-if="subitem.opinion"
+                :style="{
+                  fontSize: '16px',
+                }"
+              >
+                {{ "附件:" + slice(subitem.annex) }}
+              </div>
+              <div
+                class="time"
+                :style="{
+                  fontSize: '16px',
+                }"
+              >
+                {{ subitem.createTime }}
+              </div>
+            </el-button>
+          </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -429,7 +498,7 @@
         >
       </span>
     </el-dialog>
-    <el-dialog :title="nodechilren.title" width="30%" :visible.sync="nodelog">
+    <!-- <el-dialog :title="nodechilren.title" width="30%" :visible.sync="nodelog">
       <div class="nodebox" v-for="item in nodechilren.history" :key="item.id">
         <el-button :type="nodeColor[item.examineApprove]">
           <div
@@ -476,7 +545,7 @@
           </div>
         </el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script>
@@ -569,7 +638,7 @@ export default {
       dictUser: [],
       deptlist: [],
       nodechilren: [],
-      nodelog: false,
+      nodelog: true,
       prop: {
         label: "name",
         children: "children",
@@ -1145,7 +1214,8 @@ export default {
     }
   }
   .el-dialog {
-    .nodebox {
+    .nodebox,
+    .nodeboxchildren {
       width: 100%;
       display: flex;
       margin-top: 5px;
@@ -1160,7 +1230,24 @@ export default {
         align-items: center;
 
         .el-button {
-          width: 60%;
+          width: 90%;
+        }
+      }
+      .nodeboxchildren {
+        .el-button {
+          width: 80%;
+          opacity: 0.8;
+        }
+        .time {
+          width: 100%;
+          margin-top: 4px;
+          ::v-deep .el-textarea__inner {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 400;
+          }
         }
       }
     }

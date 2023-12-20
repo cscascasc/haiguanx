@@ -1325,7 +1325,9 @@ export default {
       justify-content: space-between;
       .top-select {
         display: flex;
+        justify-content: space-between;
         align-items: center;
+        width: 80%;
         .el-select {
           margin-left: 5px;
           width: 200px;

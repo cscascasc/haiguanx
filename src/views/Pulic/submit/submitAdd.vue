@@ -504,7 +504,6 @@
             >
               <i class="el-icon-plus"></i>
             </el-upload>
-            <em>只能上传jpg、png、pdf、svg类型的图片</em>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt="" />
             </el-dialog>
@@ -604,11 +603,11 @@ export default {
         submitType: [
           {
             label: "自己办",
-            type: "1",
+            type: "0",
           },
           {
             label: "代办",
-            type: "2",
+            type: "1",
           },
         ],
         submitName: "",
@@ -670,6 +669,7 @@ export default {
         phone: "",
         contactsName: "",
         contactsPhone: "",
+        marriageProve: "",
       },
       houseType: {
         1: "集体宿舍",
@@ -785,6 +785,7 @@ export default {
     },
     //图片提交
     handleimgup(data) {
+      const url = [];
       const imgData = data.file;
       console.log(imgData);
       const form = new FormData();
@@ -796,7 +797,14 @@ export default {
         header: { "content-type": "multipart/form-data;" },
       })
         .then((res) => {
-          console.log(res);
+          url.push(res.data);
+          this.houseForm.hasMerry = url.join(",");
+          const message = res.msg;
+          this.$notify({
+            title: "成功",
+            message: message,
+            type: "success",
+          });
         })
         .catch((error) => {
           console.error(error);

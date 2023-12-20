@@ -183,7 +183,6 @@
             >
             <el-button type="text" size="small">编辑</el-button> -->
             <el-button
-              
               type="text"
               size="small"
               :disabled="houseSataus[scope.row.status].disabled"
@@ -411,11 +410,94 @@
           <el-button
             :type="colortype[item.status]"
             style="font-size: 18px"
-            @click="openNode(item)"
+            @click="nodelog = !nodelog"
           >
             <div>{{ item.title }}</div>
             <div>{{ Type[item.status] }}</div>
           </el-button>
+          <div
+            v-if="item.history && nodelog"
+            :style="{
+              width: '100%',
+            }"
+          >
+            <div
+              class="nodeboxchildren"
+              v-for="subitem in item.history"
+              :key="subitem.id"
+            >
+              <el-button :type="colortype[subitem.examineApprove]">
+                <div
+                  class="title"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                  }"
+                >
+                  {{ subitem.userName ? subitem.userName : "审核人" }}
+                </div>
+                <div
+                  class="option"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                  }"
+                >
+                  {{
+                    "审核意见" + Type[subitem.examineApprove]
+                      ? Type[subitem.examineApprove]
+                      : ""
+                  }}
+                </div>
+                <div
+                  class="time"
+                  v-if="subitem.opinion"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                  }"
+                >
+                  <el-input
+                    v-model="subitem.opinion"
+                    type="textarea"
+                    :autosize="{ minRows: 1, maxRows: 5 }"
+                    disabled
+                  ></el-input>
+                </div>
+                <div
+                  class="time"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                  }"
+                  v-for="bitem in subitem.annexList"
+                  :key="bitem"
+                  @click="down(bitem)"
+                >
+                  {{ "附件" + bitem }}
+                </div>
+                <div
+                  class="time"
+                  v-if="subitem.annex"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                  }"
+                  @click="down(subitem.a)"
+                >
+                  {{ "附件:" + slice(subitem.annex) }}
+                </div>
+                <div
+                  class="time"
+                  :style="{
+                    fontSize: '16px',
+                  }"
+                >
+                  {{ subitem.createTime }}
+                </div>
+              </el-button>
+            </div>
+          </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -424,76 +506,13 @@
         >
       </span>
     </el-dialog>
-    <el-dialog
+    <!-- <el-dialog
       :title="nodechilren.title"
       width="30%"
       :visible.sync="nodelog"
       v-if="nodelog === true"
     >
-      <div class="nodebox" v-for="item in nodechilren.history" :key="item.id">
-        <el-button :type="colortype[item.examineApprove]">
-          <div
-            class="title"
-            :style="{
-              fontSize: '16px',
-              padding: '2px',
-            }"
-          >
-          {{ item.userName ? item.userName : "审核人" }}
-          </div>
-          <div
-            class="option"
-            :style="{
-              fontSize: '16px',
-              padding: '2px',
-            }"
-          >
-            {{ Type[item.examineApprove] }}
-          </div>
-          <div
-            class="time"
-            v-if="item.opinion"
-            :style="{
-              fontSize: '16px',
-              padding: '2px',
-            }"
-          >
-            {{ "审核意见:" + item.opinion }}
-          </div>
-          <div
-            class="time"
-            :style="{
-              fontSize: '16px',
-              padding: '2px',
-            }"
-            v-for="subitem in item.annexList"
-            :key="subitem"
-            @click="down(subitem)"
-          >
-            {{ "附件" + isubitem }}
-          </div>
-          <div
-            class="time"
-            v-if="item.annex"
-            :style="{
-              fontSize: '16px',
-              padding: '2px',
-            }"
-            @click="down(item.a)"
-          >
-            {{ "附件:" + slice(item.annex) }}
-          </div>
-          <div
-            class="time"
-            :style="{
-              fontSize: '16px',
-            }"
-          >
-            {{ item.createTime }}
-          </div>
-        </el-button>
-      </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -687,7 +706,7 @@ export default {
         value: "id",
       },
       title: "",
-      nodelog: false,
+      nodelog: true,
       nextExamineList: [],
       exit: {
         id: "",
@@ -1127,7 +1146,8 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      .flowNode {
+      .flowNode,
+      .nodeboxchildren {
         width: 80%;
         padding: 5px;
         display: flex;
@@ -1135,14 +1155,31 @@ export default {
         align-items: center;
 
         .el-button {
-          width: 70%;
+          width: 90%;
+        }
+      }
+      .nodeboxchildren {
+        width: 100%;
+        opacity: 0.8;
+        .el-button {
+          width: 80%;
+        }
+        .time {
+          width: 100%;
+          margin-top: 4px;
+          ::v-deep .el-textarea__inner {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 400;
+          }
         }
       }
       .el-button {
         width: 70%;
       }
     }
-  
   }
 }
 </style>

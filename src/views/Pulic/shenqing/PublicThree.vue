@@ -89,7 +89,12 @@
         </el-table>
       </div>
       <div class="table" v-if="form.submitList.length !== 0">
-        <el-table :data="form.submitList" style="width: 100%" border max-height="600">
+        <el-table
+          :data="form.submitList"
+          style="width: 100%"
+          border
+          max-height="600"
+        >
           <el-table-column prop="name" label="入住人" fixed="left">
           </el-table-column>
           <el-table-column prop="communityName" label="门牌号">
@@ -805,14 +810,7 @@
                     margin-top: 10px;
                     align-items: flex-end;
                   "
-                >
-                  <div style="width: 130px">
-                    本人及家庭成员工作地是否购买或承租保障性住房：:
-                  </div>
-                  <span>
-                    {{ this.isture[this.scopeRowForm.isDeleted] }}
-                  </span>
-                </div>
+                ></div>
                 <div
                   class="item"
                   style="
@@ -845,7 +843,6 @@
                   </span>
                 </div>
               </div>
-
               <div
                 style="
                   text-align: left;
@@ -868,6 +865,31 @@
                 "
               >
                 备注:
+              </div>
+              <div
+                :style="{
+                  width: '100%',
+                }"
+              >
+                <el-table
+                  border
+                  v-if="this.scopeRowForm.marriageCode !== 0"
+                  :data="this.scopeRowForm.marriageProveList"
+                  style="width: 200px"
+                >
+                  <el-table-column label="附件">
+                    <div slot-scope="scope">
+                      {{ slice(scope.row) }}
+                    </div>
+                  </el-table-column>
+                  <el-table-column label="操作">
+                    <div slot-scope="scope">
+                      <el-button type="text" @click="down(scope.row)"
+                        >下载附件</el-button
+                      >
+                    </div>
+                  </el-table-column>
+                </el-table>
               </div>
               <span>
                 {{ this.scopeRowForm.notes }}
@@ -978,6 +1000,7 @@ import { getHistory, getHistoryNode } from "@/api/activite/modle";
 import { gethouseAsset } from "@/api/house/getAsset";
 import { Disablebutton } from "@/utils/button";
 import http from "@/utils/request";
+import { getModle } from "@/api/download/download";
 export default {
   data() {
     return {
@@ -1304,6 +1327,14 @@ export default {
     },
     refesh() {
       this.$router.go();
+    },
+    down(row) {
+      getModle(row);
+    },
+    slice(row) {
+      const index = row.lastIndexOf("/");
+      const text = row.substr(index + 1);
+      return text;
     },
   },
   mounted() {
