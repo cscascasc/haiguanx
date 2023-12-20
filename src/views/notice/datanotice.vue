@@ -181,7 +181,7 @@
         <el-table-column
           prop="auditCustoms"
           align="center"
-          label="审计海关"
+          label="被审计海关"
         ></el-table-column>
         <el-table-column
           prop="responsibleDeptList"
@@ -280,7 +280,7 @@
         <el-table-column
           prop="auditCustoms"
           align="center"
-          label="审计海关"
+          label="被审计海关"
         ></el-table-column>
         <el-table-column
           prop="responsibleDeptList"
