@@ -44,7 +44,7 @@
           </div>
         </el-table-column>
         <el-table-column label="权限">
-          <div slot-scope="scope" style="height: 60px; overflow-y: scroll;">
+          <div slot-scope="scope" style="height: 60px; overflow-y: scroll">
             <span v-for="item in scope.row.menus" :key="item.name">
               {{ item.menuName }}
             </span>
@@ -177,7 +177,7 @@
 </template>
 
 <script>
-import { getAlldept, getdeptUser } from "@/api/dept/getdept";
+import { getAlldept, findDeptUser } from "@/api/dept/getdept";
 import { getrouter } from "@/api/dept/router";
 import {
   getrole,
@@ -329,7 +329,7 @@ export default {
       }
 
       for (var i = 0; i < array.length; i++) {
-        await getdeptUser(array[i][0])
+        await findDeptUser(array[i][0])
           .then((res) => {
             this.deptUser = [];
             const userlist = res.data;
