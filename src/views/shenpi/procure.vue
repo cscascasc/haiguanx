@@ -148,7 +148,7 @@
         </el-form-item>
         <div class="solt">附件</div>
         <el-form-item>
-          <el-table :data="detilelist.annexList" border>
+          <el-table :data="detilelist.annexList" border max-height="300px">
             <el-table-column label="附件名">
               <template slot-scope="scope">
                 {{ slice(scope.row) }}
@@ -338,7 +338,12 @@
           <em>请上传PDF、WORD、JPG文件</em>
         </el-form-item>
         <el-form-item label="附件列表：">
-          <el-table :data="urllist" style="width: 700px" border>
+          <el-table
+            :data="urllist"
+            max-height="600px"
+            style="width: 700px"
+            border
+          >
             <el-table-column prop="name" label="附件名称">
               <template slot-scope="scope">
                 {{ slice(scope.row.name) }}
