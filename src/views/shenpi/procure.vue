@@ -80,7 +80,6 @@
             >
           </el-form-item>
         </div>
-
         <div class="formitem">
           <el-form-item label="付款方式：">
             <el-input v-model="detilelist.paymentType"> </el-input>
@@ -148,7 +147,12 @@
         </el-form-item>
         <div class="solt">附件</div>
         <el-form-item>
-          <el-table :data="detilelist.annexList" border max-height="300px">
+          <el-table
+            :data="detilelist.annexList"
+            border
+            max-height="200px"
+            style="width: 300px"
+          >
             <el-table-column label="附件名">
               <template slot-scope="scope">
                 {{ slice(scope.row) }}
@@ -320,6 +324,7 @@
             drag
             :http-request="handleimgup"
             multiple
+            limit="10"
           >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">
@@ -340,7 +345,7 @@
         <el-form-item label="附件列表：">
           <el-table
             :data="urllist"
-            max-height="600px"
+            max-height="200px"
             style="width: 700px"
             border
           >

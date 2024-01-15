@@ -37,12 +37,12 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="操作人">
-          <el-select v-model="form.user">
+          <el-select v-model="form.userId">
             <el-option
               v-for="item in deptUserList"
               :key="item.id"
               :label="item.name"
-              :value="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -53,7 +53,7 @@
       </div>
     </div>
     <div class="table">
-      <el-table max-height="700" border :data="userList" empty-text="-">
+      <el-table max-height="630" border :data="userList" empty-text="-">
         <el-table-column label="操作" prop="title"></el-table-column>
         <el-table-column label="opType" prop="opType"></el-table-column>
         <el-table-column label="操作人" prop="user">
@@ -70,7 +70,7 @@
       </el-table>
       <div class="pagination">
         <el-pagination
-          background
+          background    
           layout="total,sizes,prev, pager, next"
           :total="total"
           :page-size="size.size"
@@ -98,7 +98,7 @@ export default {
         endTime: "",
         opType: "",
         deptId: "",
-        user: "",
+        userId: "",
       },
       size: {
         size: 10,
@@ -176,6 +176,10 @@ export default {
         deptId: "",
         user: "",
       };
+      this.size = {
+        size: 10,
+        current: 1,
+      };
     },
     //获取数据
     getUserList() {
@@ -225,12 +229,13 @@ export default {
       if (value.length !== 0) {
         // const data = value.pop();
         this.form.deptId = value[value.length - 1];
-        // this.getDeptUser(data);
+        this.getDeptUser(this.form.deptId);
       }
     },
     //获取用户
     getDeptUser(value) {
-      this.userList = [];
+      // this.userList = [];
+      this.deptUserList = [];
       findDeptUser(value)
         .then((res) => {
           const userlist = res.data;
@@ -265,7 +270,7 @@ export default {
   flex-direction: column;
   overflow: hidden;
   color: #000;
-  .el-form{
+  .el-form {
     display: flex;
     flex-wrap: wrap;
   }
