@@ -234,10 +234,8 @@
                 prop="budgetAmount"
                 label="采购金额"
               ></el-table-column>
-              <el-table-column label="付款方式">
-                <div>
-                  {{ paymentType[0].dictLabel }}
-                </div>
+
+              <el-table-column label="付款方式" prop="paymentType">
               </el-table-column>
               <el-table-column
                 prop="contractNum"
@@ -375,11 +373,7 @@
                 prop="budgetAmount"
                 label="采购金额"
               ></el-table-column>
-              <el-table-column label="付款方式">
-                <div>
-                  {{ paymentType[0].dictLabel }}
-                </div>
-              </el-table-column>
+              <el-table-column label="付款方式" prop="paymentType">
               <el-table-column
                 prop="contractNum"
                 label="合同编号"
@@ -478,11 +472,7 @@
                 prop="budgetAmount"
                 label="采购金额"
               ></el-table-column>
-              <el-table-column label="付款方式">
-                <div>
-                  {{ paymentType[0].dictLabel }}
-                </div>
-              </el-table-column>
+              <el-table-column label="付款方式" prop="paymentType">
               <el-table-column
                 prop="contractNum"
                 label="合同编号"

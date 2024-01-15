@@ -65,7 +65,12 @@
       </el-table>
     </div>
     <div class="table">
-      <el-table :data="tablelist" v-if="tablelist.length !== 0" border max-height="600"> 
+      <el-table
+        :data="tablelist"
+        v-if="tablelist.length !== 0"
+        border
+        max-height="600"
+      >
         <el-table-column
           prop="name"
           label="采购项目名称"
@@ -83,11 +88,12 @@
           prop="procureWayName"
           label="采购方式"
         ></el-table-column>
-        <el-table-column prop="earnestMoney" label="采购金额"></el-table-column>
+        <el-table-column prop="budgetAmount" label="采购金额"></el-table-column>
         <el-table-column
-          prop="paymentTypeName"
+          prop="paymentType"
           label="付款方式"
-        ></el-table-column>
+        >  
+       </el-table-column>
         <el-table-column prop="contractNum" label="合同编号"></el-table-column>
         <el-table-column prop="dept.name" label="需求部门"></el-table-column>
         <el-table-column prop="contacts" label="联系人"></el-table-column>
@@ -157,7 +163,7 @@
           </div>
           <div class="formitem">
             <el-form-item label="采购金额：">
-              <el-input v-model="detilelist.budgeAmount" type="number">
+              <el-input v-model="detilelist.budgetAmount" type="number">
                 <i slot="suffix" style="font-size: 12px">万元</i></el-input
               >
             </el-form-item>
@@ -172,11 +178,7 @@
               <el-input v-model="detilelist.afterService"></el-input>
             </el-form-item>
             <el-form-item label="付款方式：">
-              <el-input
-                v-model="formlist.paymentType"
-                :placeholder="paymentType[0].dictLabel"
-              >
-              </el-input>
+              <el-input v-model="detilelist.paymentType"> </el-input>
             </el-form-item>
           </div>
           <div class="formitem">
@@ -625,9 +627,10 @@ export default {
   align-items: center;
   .top {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding: 10px;
-    width: 80%;
+    width: 70%;
     margin-top: 10px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 12px;
@@ -650,7 +653,7 @@ export default {
     padding: 10px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
     border-radius: 12px;
-    width: 80%;
+    width: 70%;
     .el-table {
       width: 100%;
     }

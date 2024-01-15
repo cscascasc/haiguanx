@@ -366,7 +366,7 @@
     </div>
     <el-dialog title="采购申请" :visible.sync="prodialog" width="60%" center>
       <div class="form">
-        <el-form :model="formlist" ref="formlist" inline >
+        <el-form :model="formlist" ref="formlist" inline>
           <div class="solt">采购申请</div>
           <div class="formitem">
             <el-form-item
@@ -698,8 +698,8 @@
           </div>
           <div class="formitem">
             <el-form-item label="采购金额：">
-              <el-input v-model="detilelist.budgetAmount" type="number"
-                ><i slot="suffix" style="font-size: 12px">万元</i></el-input
+              <el-input v-model="detilelist.budgetAmount" type="number">
+                <i slot="suffix" style="font-size: 12px">万元</i></el-input
               >
             </el-form-item>
             <el-form-item label="履约保证金：">
