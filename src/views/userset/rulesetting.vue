@@ -218,6 +218,7 @@ import {
 import { Disablebutton } from "@/utils/button";
 import { getAlldept, getdeptUser } from "@/api/dept/getdept";
 export default {
+  name: "orderlist",
   data() {
     return {
       tableData: [],

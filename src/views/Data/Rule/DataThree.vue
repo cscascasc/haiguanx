@@ -140,7 +140,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="total"
           :page-size="form.size"
           @prev-click="changepage"
@@ -176,6 +176,7 @@ import { getrule, changestatus, delaterule } from "@/api/data/rule/getrule";
 import { importRule, exportRule, getModle } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       value1: "",
@@ -266,7 +267,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.ObjectList = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
@@ -286,12 +288,14 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.ObjectList = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
         });
-      this.$router.go();
+      this.ObjectList = [];
+      this.gettabledata();
     },
     getoption() {
       getbusinessAear()
@@ -354,7 +358,8 @@ export default {
             message: res.msg,
             type: "success",
           });
-          this.$router.go();
+          this.ObjectList = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
@@ -384,12 +389,14 @@ export default {
               message: message,
               type: "success",
             });
-            this.$router.go();
+            this.ObjectList = [];
+            this.gettabledata();
           })
           .catch((error) => {
             console.error(error);
           });
-        this.$router.go();
+        this.ObjectList = [];
+        this.gettabledata();
       });
     },
   },

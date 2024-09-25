@@ -106,7 +106,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="form.total"
                   :page-size="form.size"
                   @prev-click="changepage"
@@ -228,7 +228,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="form.total"
                   :page-size="form.size"
                   @prev-click="changepage"
@@ -350,7 +350,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="form.total"
                   :page-size="form.size"
                   @prev-click="changepage"
@@ -664,7 +664,7 @@
       v-if="detileialog"
     >
       <div class="form">
-        <el-form :model="detilelist" ref="formlist" inline disabled>
+        <el-form :model="detilelist" inline disabled>
           <div class="solt">采购申请</div>
           <div class="formitem">
             <el-form-item label="采购项目名称:">
@@ -829,7 +829,6 @@
           </el-form-item>
         </el-form>
       </div>
-
       <span slot="footer" class="dialog-footer">
         <el-button @click="detileialog = false" type="danger">关闭</el-button>
       </span>
@@ -856,6 +855,7 @@ import {
 import { getdict } from "@/api/dict/getdict";
 import { getdeptUser } from "@/api/dept/getdept";
 export default {
+  name: "orderlist",
   data() {
     return {
       tablelist: [],
@@ -898,7 +898,7 @@ export default {
           type: "warning",
         },
         {
-          lable: "代补充信息",
+          lable: "待补充信息",
           type: "primary",
         },
         {
@@ -977,7 +977,8 @@ export default {
     },
     //确认按钮
     consure(forName) {
-      this.$refs[forName].validate((valid) => {
+      console.log(forName);
+      this.$refs.formlist.validate((valid) => {
         if (valid) {
           this.submitdialog = true;
         } else {

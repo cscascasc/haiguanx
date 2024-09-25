@@ -35,7 +35,8 @@ http.interceptors.response.use(
         const data = JSON.parse(json)
         const code = res.data.code || 200
         //获取错误信息
-        const msg = errCode[code] || res.data.msg || errCode['default']
+        const msg = errCode[code] || res.data.msg 
+        // const msg = errCode[code] || res.data.msg || errCode['default']
         if (data.code === 302) {
             location.href = data.data
             //   location.href = '/login'

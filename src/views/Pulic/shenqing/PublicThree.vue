@@ -1,213 +1,1096 @@
 <template>
   <div class="container">
-    <div class="top-container">
-      <div class="top-select">
-        <div class="select-title">房屋所在地:</div>
-        <el-select v-model="cityValue" clearable @change="changeCity">
-          <el-option
-            v-for="item in cityParams"
-            :key="item.cityName"
-            :label="item.cityName"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-        <el-select v-model="countyValue" clearable @change="changeCounty">
-          <el-option
-            v-for="item in countyParams"
-            :key="item.countyName"
-            :label="item.countyName"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-        <el-select v-model="townValue" clearable @change="changetown">
-          <el-option
-            v-for="item in townParams"
-            :key="item.townName"
-            :label="item.townName"
-            :value="item.id"
-          >
-          </el-option>
-        </el-select>
-        <div class="select-title">房屋性质:</div>
-        <el-select v-model="data.propertyNatureCode">
-          <el-option
-            v-for="item in form.housetype"
-            :key="item.label"
-            :value="item.value"
-            :label="item.label"
-          ></el-option>
-        </el-select>
-        <div class="select-title">审批类型:</div>
-        <el-select v-model="data.processCode">
-          <el-option
-            v-for="item in form.stateType"
-            :key="item.label"
-            :value="item.value"
-            :label="item.label"
-          ></el-option>
-        </el-select>
-        <div class="select-title">办理形式:</div>
-        <el-select v-model="data.handleTypeCode">
-          <el-option
-            v-for="item in form.submitType"
-            :key="item.label"
-            :value="item.value"
-            :label="item.label"
-          ></el-option>
-        </el-select>
-      </div>
-      <el-button size="small" icon="el-icon-search" @click="search">
-        搜索</el-button
-      >
-      <el-button size="small" icon="el-icon-refresh" @click="refesh">
-        重置</el-button
-      >
-    </div>
     <div class="mid-container">
-      <div class="table" v-if="form.submitList.length === 0">
-        <el-table style="width: 100%" border>
-          <el-table-column label="入住人" fixed="left"> </el-table-column>
-          <el-table-column label="门牌号"> </el-table-column>
-          <el-table-column label="小区/楼道/单元"> </el-table-column>
-          <el-table-column label="归属地"> </el-table-column>
-          <el-table-column label="房屋性质"> </el-table-column>
-          <el-table-column label="房屋面积"> </el-table-column>
-          <el-table-column label="实际使用面积"> </el-table-column>
-          <el-table-column label="公摊使用面积"> </el-table-column>
-          <el-table-column label="户型"> </el-table-column>
-          <el-table-column label="房间"> </el-table-column>
-          <el-table-column label="申请人"> </el-table-column>
-          <el-table-column label="职别"> </el-table-column>
-          <el-table-column label="办理形式"> </el-table-column>
-          <el-table-column label="审批类型"> </el-table-column>
-          <el-table-column label="审核状态"> </el-table-column>
-          <el-table-column label="提交时间"> </el-table-column>
-          <el-table-column label="操作" fixed="right" width="180">
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="table" v-if="form.submitList.length !== 0">
-        <el-table
-          :data="form.submitList"
-          style="width: 100%"
-          border
-          max-height="600"
-        >
-          <el-table-column prop="name" label="入住人" fixed="left">
-          </el-table-column>
-          <el-table-column prop="communityName" label="门牌号">
-            <div slot-scope="scope">
-              {{ scope.row.house.roomNumber }}
+      <el-tabs type="border-card">
+        <el-tab-pane label="全部">
+          <div class="top-container">
+            <div class="top-select">
+              <!-- <div class="select-title">房屋所在地:</div>
+              <el-select v-model="cityValue" clearable @change="changeCity">
+                <el-option
+                  v-for="item in cityParams"
+                  :key="item.cityName"
+                  :label="item.cityName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="countyValue" clearable @change="changeCounty">
+                <el-option
+                  v-for="item in countyParams"
+                  :key="item.countyName"
+                  :label="item.countyName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="townValue" clearable @change="changetown">
+                <el-option
+                  v-for="item in townParams"
+                  :key="item.townName"
+                  :label="item.townName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select> -->
+              <div class="select-title">房屋性质:</div>
+              <el-select v-model="data.propertyNatureCode">
+                <el-option
+                  v-for="item in form.housetype"
+                  :key="item.dictValue"
+                  :value="item.dictValue"
+                  :label="item.dictLabel"
+                ></el-option>
+              </el-select>
+              <div class="select-title">审批类型:</div>
+              <el-select v-model="data.processCode">
+                <el-option
+                  v-for="item in form.stateType"
+                  :key="item.label"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+              <div class="select-title">办理形式:</div>
+              <el-select v-model="data.handleTypeCode">
+                <el-option
+                  v-for="item in form.submitType"
+                  :key="item.label"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
             </div>
-          </el-table-column>
-          <el-table-column prop="cityName" label="小区/楼道/单元">
-            <div slot-scope="scope">
-              {{ scope.row.house.houseEstate + scope.row.house.unit }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="provinceName" label="归属地">
-          </el-table-column>
-          <el-table-column prop="community" label="房屋性质">
-            <div slot-scope="scope">
-              {{ scope.row.house.propertyNature }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="roomNumber" label="房屋面积">
-            <div slot-scope="scope">
-              {{ scope.row.house.allArea }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="roomNumber" label="实际使用面积">
-            <div slot-scope="scope">
-              {{ scope.row.house.actualArea }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="propertyOwner" label="公摊使用面积">
-            <div slot-scope="scope">
-              {{ scope.row.house.shareArea }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="roomNumber" label="户型">
-            <div slot-scope="scope">
-              {{
-                scope.row.house.bedroomNum +
-                "室" +
-                scope.row.house.parlorNum +
-                "厅" +
-                scope.row.house.toiletNum +
-                "卫"
-              }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="roomId" label="房间">
-            <div slot-scope="scope">
-              {{ scope.row.roomId ? scope.row.roomId : "暂无" }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="name" label="申请人"> </el-table-column>
-          <el-table-column prop="rankName" label="职别">
-            <div slot-scope="scope">
-              {{ rankName[scope.row.rankCode - 1] }}
-            </div>
-          </el-table-column>
-          <el-table-column prop="handleType" label="办理形式">
-          </el-table-column>
-          <el-table-column label="审批类型">
-            <div slot-scope="scope">
-              <span v-if="scope.row.processCode === 'housing_business'"
-                >住房审批</span
+            <div>
+              <el-button size="small" icon="el-icon-search" @click="search">
+                搜索</el-button
               >
-              <span v-if="scope.row.processCode === 'house_rent_refund'"
-                >退房审批审批</span
+              <el-button size="small" icon="el-icon-refresh" @click="refesh">
+                重置</el-button
               >
             </div>
-          </el-table-column>
-          <el-table-column prop="roomNumber" label="审核状态">
-            <div slot-scope="scope">
-              <span v-if="scope.row.status === 0">审核中</span>
-              <span v-if="scope.row.status === 1">审核通过</span>
-              <span v-if="scope.row.status === 4">待复审</span>
+          </div>
+          <div class="table" v-if="form.submitList.length === 0">
+            <el-table style="width: 100%" border>
+              <el-table-column label="入住人" fixed="left"> </el-table-column>
+              <el-table-column label="门牌号"> </el-table-column>
+              <el-table-column label="小区/楼道/单元"> </el-table-column>
+              <el-table-column label="归属地"> </el-table-column>
+              <el-table-column label="房屋性质"> </el-table-column>
+              <el-table-column label="房屋面积"> </el-table-column>
+              <el-table-column label="实际使用面积"> </el-table-column>
+              <el-table-column label="公摊使用面积"> </el-table-column>
+              <el-table-column label="户型"> </el-table-column>
+              <el-table-column label="房间"> </el-table-column>
+              <el-table-column label="申请人"> </el-table-column>
+              <el-table-column label="职别"> </el-table-column>
+              <el-table-column label="办理形式"> </el-table-column>
+              <el-table-column label="审批类型"> </el-table-column>
+              <el-table-column label="审核状态"> </el-table-column>
+              <el-table-column label="提交时间"> </el-table-column>
+              <el-table-column label="操作" fixed="right" width="180">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="table" v-if="form.submitList.length !== 0">
+            <el-table
+              :data="form.submitList"
+              style="width: 100%"
+              border
+              max-height="600"
+            >
+              <el-table-column prop="name" label="入住人" fixed="left">
+              </el-table-column>
+              <el-table-column prop="communityName" label="门牌号">
+                <div slot-scope="scope">
+                  {{ scope.row.house.roomNumber }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="cityName" label="小区/楼道/单元">
+                <div slot-scope="scope">
+                  {{ scope.row.house.houseEstate + scope.row.house.unit }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="provinceName" label="归属地">
+              </el-table-column>
+              <el-table-column prop="community" label="房屋性质">
+                <div slot-scope="scope">
+                  {{ scope.row.house.propertyNature }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="房屋面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.allArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="实际使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.actualArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="propertyOwner" label="公摊使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.shareArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="户型">
+                <div slot-scope="scope">
+                  {{
+                    scope.row.house.bedroomNum +
+                    "室" +
+                    scope.row.house.parlorNum +
+                    "厅" +
+                    scope.row.house.toiletNum +
+                    "卫"
+                  }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomId" label="房间">
+                <div slot-scope="scope">
+                  {{ scope.row.roomId ? scope.row.roomId : "暂无" }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="name" label="申请人"> </el-table-column>
+              <el-table-column prop="rankName" label="职别">
+                <div slot-scope="scope">
+                  {{ rankName[scope.row.rankCode - 1].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="handleType" label="办理形式">
+              </el-table-column>
+              <el-table-column label="审批类型">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.processCode === 'housing_business'"
+                    >住房审批</span
+                  >
+                  <span v-if="scope.row.processCode === 'house_rent_refund'"
+                    >退房审批审批</span
+                  >
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="审核状态">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.status === 0">审核中</span>
+                  <span v-if="scope.row.status === 1">审核通过</span>
+                  <span v-if="scope.row.status === 4">待复审</span>
+                </div>
+              </el-table-column>
+              <el-table-column prop="updateTime" label="提交时间">
+              </el-table-column>
+              <el-table-column
+                prop="roomNumber"
+                label="操作"
+                fixed="right"
+                width="180"
+              >
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    icon="el-icon-edit"
+                    @click="detile(scope.row)"
+                    >详情</el-button
+                  >
+                  <el-button
+                    type="text"
+                    icon="el-icon-check"
+                    @click="apporOpen(scope.row)"
+                    :disabled="scope.row.status === 1 ? true : false"
+                    >审批</el-button
+                  >
+                  <el-button
+                    type="text"
+                    v-if="scope.row.status === 1"
+                    @click="guidang(scope.row)"
+                    >归档</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total,prev, pager, next"
+              :total="total"
+              :page-size="data.size"
+              @prev-click="prev"
+              @next-click="prev"
+              @current-change="prev"
+            >
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="待审批">
+          <div class="top-container">
+            <div class="top-select">
+              <!-- <div class="select-title">房屋所在地:</div>
+              <el-select v-model="cityValue" clearable @change="changeCity">
+                <el-option
+                  v-for="item in cityParams"
+                  :key="item.cityName"
+                  :label="item.cityName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="countyValue" clearable @change="changeCounty">
+                <el-option
+                  v-for="item in countyParams"
+                  :key="item.countyName"
+                  :label="item.countyName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="townValue" clearable @change="changetown">
+                <el-option
+                  v-for="item in townParams"
+                  :key="item.townName"
+                  :label="item.townName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select> -->
+              <div class="select-title">房屋性质:</div>
+              <el-select v-model="waitdata.propertyNatureCode">
+                <el-option
+                  v-for="item in form.housetype"
+                  :key="item.dictValue"
+                  :value="item.dictValue"
+                  :label="item.dictLabel"
+                ></el-option>
+              </el-select>
+              <div class="select-title">审批类型:</div>
+              <el-select v-model="waitdata.processCode">
+                <el-option
+                  v-for="item in form.stateType"
+                  :key="item.label"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+              <div class="select-title">申请时间</div>
+              <el-date-picker
+                v-model="waitdata.createYear"
+                format="yyyy"
+                type="year"
+              ></el-date-picker>
             </div>
-          </el-table-column>
-          <el-table-column prop="stayCycle" label="提交时间"> </el-table-column>
-          <el-table-column
-            prop="roomNumber"
-            label="操作"
-            fixed="right"
-            width="180"
-          >
-            <template slot-scope="scope">
+            <div>
+              <el-button size="small" icon="el-icon-search" @click="wasearch">
+                搜索</el-button
+              >
+              <el-button size="small" icon="el-icon-refresh" @click="refesh">
+                重置</el-button
+              >
+            </div>
+          </div>
+          <div class="table" v-if="waitData.length === 0">
+            <el-table style="width: 100%" border>
+              <el-table-column label="入住人" fixed="left"> </el-table-column>
+              <el-table-column label="门牌号"> </el-table-column>
+              <el-table-column label="小区/楼道/单元"> </el-table-column>
+              <el-table-column label="归属地"> </el-table-column>
+              <el-table-column label="房屋性质"> </el-table-column>
+              <el-table-column label="房屋面积"> </el-table-column>
+              <el-table-column label="实际使用面积"> </el-table-column>
+              <el-table-column label="公摊使用面积"> </el-table-column>
+              <el-table-column label="户型"> </el-table-column>
+              <el-table-column label="房间"> </el-table-column>
+              <el-table-column label="申请人"> </el-table-column>
+              <el-table-column label="职别"> </el-table-column>
+              <el-table-column label="办理形式"> </el-table-column>
+              <el-table-column label="审批类型"> </el-table-column>
+              <el-table-column label="审核状态"> </el-table-column>
+              <el-table-column label="提交时间"> </el-table-column>
+              <el-table-column label="操作" fixed="right" width="180">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="table" v-if="waitData.length !== 0">
+            <el-table
+              :data="waitData"
+              style="width: 100%"
+              border
+              max-height="600"
+            >
+              <el-table-column prop="name" label="入住人" fixed="left">
+              </el-table-column>
+              <el-table-column prop="communityName" label="门牌号">
+                <div slot-scope="scope">
+                  {{ scope.row.house.roomNumber }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="cityName" label="小区/楼道/单元">
+                <div slot-scope="scope">
+                  {{ scope.row.house.houseEstate + scope.row.house.unit }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="provinceName" label="归属地">
+              </el-table-column>
+              <el-table-column prop="community" label="房屋性质">
+                <div slot-scope="scope">
+                  {{ scope.row.house.propertyNature }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="房屋面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.allArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="实际使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.actualArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="propertyOwner" label="公摊使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.shareArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="户型">
+                <div slot-scope="scope">
+                  {{
+                    scope.row.house.bedroomNum +
+                    "室" +
+                    scope.row.house.parlorNum +
+                    "厅" +
+                    scope.row.house.toiletNum +
+                    "卫"
+                  }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomId" label="房间">
+                <div slot-scope="scope">
+                  {{ scope.row.roomId ? scope.row.roomId : "暂无" }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="name" label="申请人"> </el-table-column>
+              <el-table-column prop="rankName" label="职别">
+                <div slot-scope="scope">
+                  {{ rankName[scope.row.rankCode - 1].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="handleType" label="办理形式">
+              </el-table-column>
+              <el-table-column label="审批类型">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.processCode === 'housing_business'"
+                    >住房审批</span
+                  >
+                  <span v-if="scope.row.processCode === 'house_rent_refund'"
+                    >退房审批审批</span
+                  >
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="审核状态">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.status === 0">审核中</span>
+                  <span v-if="scope.row.status === 1">审核通过</span>
+                  <span v-if="scope.row.status === 4">待复审</span>
+                </div>
+              </el-table-column>
+              <el-table-column prop="updateTime" label="提交时间">
+              </el-table-column>
+              <el-table-column
+                prop="roomNumber"
+                label="操作"
+                fixed="right"
+                width="180"
+              >
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    icon="el-icon-edit"
+                    @click="detile(scope.row)"
+                    >详情</el-button
+                  >
+                  <el-button
+                    type="text"
+                    icon="el-icon-check"
+                    @click="apporOpen(scope.row)"
+                    :disabled="scope.row.status === 1 ? true : false"
+                    >审批</el-button
+                  >
+                  <el-button
+                    type="text"
+                    v-if="scope.row.status === 1"
+                    @click="guidang(scope.row)"
+                    >归档</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total,prev, pager, next"
+              :total="waitTotal"
+              :page-size="waitdata.size"
+              @prev-click="wapassprev"
+              @next-click="wapassprev"
+              @current-change="wapassprev"
+            >
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="我发起的">
+          <div class="top-container">
+            <div class="top-select">
+              <!-- <div class="select-title">房屋所在地:</div>
+              <el-select v-model="cityValue" clearable @change="changeCity">
+                <el-option
+                  v-for="item in cityParams"
+                  :key="item.cityName"
+                  :label="item.cityName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="countyValue" clearable @change="changeCounty">
+                <el-option
+                  v-for="item in countyParams"
+                  :key="item.countyName"
+                  :label="item.countyName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="townValue" clearable @change="changetown">
+                <el-option
+                  v-for="item in townParams"
+                  :key="item.townName"
+                  :label="item.townName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select> -->
+              <div class="select-title">房屋性质:</div>
+              <el-select v-model="mydata.propertyNatureCode">
+                <el-option
+                  v-for="item in form.housetype"
+                  :key="item.dictValue"
+                  :value="item.dictValue"
+                  :label="item.dictLabel"
+                ></el-option>
+              </el-select>
+              <div class="select-title">审批类型:</div>
+              <el-select v-model="mydata.processCode">
+                <el-option
+                  v-for="item in form.stateType"
+                  :key="item.label"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+              <div class="select-title">申请时间</div>
+              <el-date-picker
+                v-model="mydata.createYear"
+                value-format="yyyy"
+                type="year"
+              ></el-date-picker>
+            </div>
+            <div>
+              <el-button size="small" icon="el-icon-search" @click="mysearch">
+                搜索</el-button
+              >
+              <el-button size="small" icon="el-icon-refresh" @click="refesh">
+                重置</el-button
+              >
+            </div>
+          </div>
+          <div class="table" v-if="myData.length === 0">
+            <el-table style="width: 100%" border>
+              <el-table-column label="入住人" fixed="left"> </el-table-column>
+              <el-table-column label="门牌号"> </el-table-column>
+              <el-table-column label="小区/楼道/单元"> </el-table-column>
+              <el-table-column label="归属地"> </el-table-column>
+              <el-table-column label="房屋性质"> </el-table-column>
+              <el-table-column label="房屋面积"> </el-table-column>
+              <el-table-column label="实际使用面积"> </el-table-column>
+              <el-table-column label="公摊使用面积"> </el-table-column>
+              <el-table-column label="户型"> </el-table-column>
+              <el-table-column label="房间"> </el-table-column>
+              <el-table-column label="申请人"> </el-table-column>
+              <el-table-column label="职别"> </el-table-column>
+              <el-table-column label="办理形式"> </el-table-column>
+              <el-table-column label="审批类型"> </el-table-column>
+              <el-table-column label="审核状态"> </el-table-column>
+              <el-table-column label="提交时间"> </el-table-column>
+              <el-table-column label="操作" fixed="right" width="180">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="table" v-if="myData.length !== 0">
+            <el-table
+              :data="myData"
+              style="width: 100%"
+              border
+              max-height="600"
+            >
+              <el-table-column prop="name" label="入住人" fixed="left">
+              </el-table-column>
+              <el-table-column prop="communityName" label="门牌号">
+                <div slot-scope="scope">
+                  {{ scope.row.house.roomNumber }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="cityName" label="小区/楼道/单元">
+                <div slot-scope="scope">
+                  {{ scope.row.house.houseEstate + scope.row.house.unit }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="provinceName" label="归属地">
+              </el-table-column>
+              <el-table-column prop="community" label="房屋性质">
+                <div slot-scope="scope">
+                  {{ scope.row.house.propertyNature }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="房屋面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.allArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="实际使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.actualArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="propertyOwner" label="公摊使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.shareArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="户型">
+                <div slot-scope="scope">
+                  {{
+                    scope.row.house.bedroomNum +
+                    "室" +
+                    scope.row.house.parlorNum +
+                    "厅" +
+                    scope.row.house.toiletNum +
+                    "卫"
+                  }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomId" label="房间">
+                <div slot-scope="scope">
+                  {{ scope.row.roomId ? scope.row.roomId : "暂无" }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="name" label="申请人"> </el-table-column>
+              <el-table-column prop="rankName" label="职别">
+                <div slot-scope="scope">
+                  {{ rankName[scope.row.rankCode - 1].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="handleType" label="办理形式">
+              </el-table-column>
+              <el-table-column label="审批类型">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.processCode === 'housing_business'"
+                    >住房审批</span
+                  >
+                  <span v-if="scope.row.processCode === 'house_rent_refund'"
+                    >退房审批审批</span
+                  >
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="审核状态">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.status === 0">审核中</span>
+                  <span v-if="scope.row.status === 1">审核通过</span>
+                  <span v-if="scope.row.status === 4">待复审</span>
+                </div>
+              </el-table-column>
+              <el-table-column prop="updateTime" label="提交时间">
+              </el-table-column>
+              <el-table-column
+                prop="roomNumber"
+                label="操作"
+                fixed="right"
+                width="180"
+              >
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    icon="el-icon-edit"
+                    @click="detile(scope.row)"
+                    >详情</el-button
+                  >
+                  <el-button
+                    type="text"
+                    icon="el-icon-check"
+                    @click="apporOpen(scope.row)"
+                    :disabled="scope.row.status === 1 ? true : false"
+                    >审批</el-button
+                  >
+                  <el-button
+                    type="text"
+                    v-if="scope.row.status === 1"
+                    @click="guidang(scope.row)"
+                    >归档</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total,prev, pager, next"
+              :total="myTotal"
+              :page-size="mydata.size"
+              @prev-click="mypassprev"
+              @next-click="mypassprev"
+              @current-change="mypassprev"
+            >
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="已通过">
+          <div class="top-container">
+            <div class="top-select">
+              <!-- <div class="select-title">房屋所在地:</div>
+              <el-select v-model="cityValue" clearable @change="changeCity">
+                <el-option
+                  v-for="item in cityParams"
+                  :key="item.cityName"
+                  :label="item.cityName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="countyValue" clearable @change="changeCounty">
+                <el-option
+                  v-for="item in countyParams"
+                  :key="item.countyName"
+                  :label="item.countyName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="townValue" clearable @change="changetown">
+                <el-option
+                  v-for="item in townParams"
+                  :key="item.townName"
+                  :label="item.townName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select> -->
+              <div class="select-title">房屋性质:</div>
+              <el-select v-model="pashdata.propertyNatureCode">
+                <el-option
+                  v-for="item in form.housetype"
+                  :key="item.dictValue"
+                  :value="item.dictValue"
+                  :label="item.dictLabel"
+                ></el-option>
+              </el-select>
+              <div class="select-title">审批类型:</div>
+              <el-select v-model="pashdata.processCode">
+                <el-option
+                  v-for="item in form.stateType"
+                  :key="item.label"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+              <div class="select-title">申请时间</div>
+              <el-date-picker
+                v-model="pashdata.createYear"
+                value-format="yyyy"
+                type="year"
+              ></el-date-picker>
+            </div>
+            <div>
+              <el-button size="small" icon="el-icon-search" @click="pasearch">
+                搜索</el-button
+              >
+              <el-button size="small" icon="el-icon-refresh" @click="refesh">
+                重置</el-button
+              >
+            </div>
+          </div>
+          <div class="table" v-if="pashData.length === 0">
+            <el-table style="width: 100%" border>
+              <el-table-column label="入住人" fixed="left"> </el-table-column>
+              <el-table-column label="门牌号"> </el-table-column>
+              <el-table-column label="小区/楼道/单元"> </el-table-column>
+              <el-table-column label="归属地"> </el-table-column>
+              <el-table-column label="房屋性质"> </el-table-column>
+              <el-table-column label="房屋面积"> </el-table-column>
+              <el-table-column label="实际使用面积"> </el-table-column>
+              <el-table-column label="公摊使用面积"> </el-table-column>
+              <el-table-column label="户型"> </el-table-column>
+              <el-table-column label="房间"> </el-table-column>
+              <el-table-column label="申请人"> </el-table-column>
+              <el-table-column label="职别"> </el-table-column>
+              <el-table-column label="办理形式"> </el-table-column>
+              <el-table-column label="审批类型"> </el-table-column>
+              <el-table-column label="审核状态"> </el-table-column>
+              <el-table-column label="提交时间"> </el-table-column>
+              <el-table-column label="操作" fixed="right" width="180">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="table" v-if="pashData.length !== 0">
+            <el-table
+              :data="pashData"
+              style="width: 100%"
+              border
+              max-height="600"
+            >
+              <el-table-column prop="name" label="入住人" fixed="left">
+              </el-table-column>
+              <el-table-column prop="communityName" label="门牌号">
+                <div slot-scope="scope">
+                  {{ scope.row.house.roomNumber }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="cityName" label="小区/楼道/单元">
+                <div slot-scope="scope">
+                  {{ scope.row.house.houseEstate + scope.row.house.unit }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="provinceName" label="归属地">
+              </el-table-column>
+              <el-table-column prop="community" label="房屋性质">
+                <div slot-scope="scope">
+                  {{ scope.row.house.propertyNature }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="房屋面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.allArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="实际使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.actualArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="propertyOwner" label="公摊使用面积">
+                <div slot-scope="scope">
+                  {{ scope.row.house.shareArea }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="户型">
+                <div slot-scope="scope">
+                  {{
+                    scope.row.house.bedroomNum +
+                    "室" +
+                    scope.row.house.parlorNum +
+                    "厅" +
+                    scope.row.house.toiletNum +
+                    "卫"
+                  }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomId" label="房间">
+                <div slot-scope="scope">
+                  {{ scope.row.roomId ? scope.row.roomId : "暂无" }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="name" label="申请人"> </el-table-column>
+              <el-table-column prop="rankName" label="职别">
+                <div slot-scope="scope">
+                  {{ rankName[scope.row.rankCode - 1].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column prop="handleType" label="办理形式">
+              </el-table-column>
+              <el-table-column label="审批类型">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.processCode === 'housing_business'"
+                    >住房审批</span
+                  >
+                  <span v-if="scope.row.processCode === 'house_rent_refund'"
+                    >退房审批审批</span
+                  >
+                </div>
+              </el-table-column>
+              <el-table-column prop="roomNumber" label="审核状态">
+                <div slot-scope="scope">
+                  <span v-if="scope.row.status === 0">审核中</span>
+                  <span v-if="scope.row.status === 1">审核通过</span>
+                  <span v-if="scope.row.status === 4">待复审</span>
+                </div>
+              </el-table-column>
+              <el-table-column prop="updateTime" label="提交时间">
+              </el-table-column>
+              <el-table-column
+                prop="roomNumber"
+                label="操作"
+                fixed="right"
+                width="280"
+              >
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    icon="el-icon-edit"
+                    @click="detile(scope.row)"
+                    >详情</el-button
+                  >
+                  <el-button
+                    type="text"
+                    icon="el-icon-check"
+                    @click="apporOpen(scope.row)"
+                    :disabled="scope.row.status === 1 ? true : false"
+                    >审批</el-button
+                  >
+                  <el-button
+                    type="text"
+                    icon="el-icon-delete"
+                    @click="deleted(scope.row)"
+                    :disabled="isDesiable('houseLoding:remove:remove')"
+                    >删除</el-button
+                  >
+                  <el-button
+                    type="text"
+                    v-if="scope.row.status === 1"
+                    @click="guidang(scope.row)"
+                    >归档</el-button
+                  >
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="total,prev, pager, next"
+              :total="pashTotal"
+              :page-size="pashdata.size"
+              @prev-click="passprev"
+              @next-click="passprev"
+              @current-change="passprev"
+            >
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="我审核的">
+          <div class="top-container">
+            <div class="top-select">
+              <!-- <div class="select-title">房屋所在地:</div>
+              <el-select v-model="cityValue" clearable @change="changeCity">
+                <el-option
+                  v-for="item in cityParams"
+                  :key="item.cityName"
+                  :label="item.cityName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="countyValue" clearable @change="changeCounty">
+                <el-option
+                  v-for="item in countyParams"
+                  :key="item.countyName"
+                  :label="item.countyName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select>
+              <el-select v-model="townValue" clearable @change="changetown">
+                <el-option
+                  v-for="item in townParams"
+                  :key="item.townName"
+                  :label="item.townName"
+                  :value="item.id"
+                >
+                </el-option>
+              </el-select> -->
+              <div class="select-title">房屋性质:</div>
+              <el-select v-model="myaduit.propertyNatureCode">
+                <el-option
+                  v-for="item in form.housetype"
+                  :key="item.dictValue"
+                  :value="item.dictValue"
+                  :label="item.dictLabel"
+                ></el-option>
+              </el-select>
+              <div class="select-title">审批类型:</div>
+              <el-select v-model="myaduit.processCode">
+                <el-option
+                  v-for="item in form.stateType"
+                  :key="item.label"
+                  :value="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+              <div class="select-title">申请时间</div>
+              <el-date-picker
+                v-model="myaduit.createYear"
+                format="yyyy"
+                type="year"
+              ></el-date-picker>
+            </div>
+            <div>
               <el-button
-                type="text"
-                icon="el-icon-edit"
-                @click="detile(scope.row)"
-                >详情</el-button
+                size="small"
+                icon="el-icon-search"
+                @click="myexamineserch"
+              >
+                搜索</el-button
               >
               <el-button
-                type="text"
-                icon="el-icon-check"
-                @click="apporOpen(scope.row)"
-                :disabled="scope.row.status === 1 ? true : false"
-                >审批</el-button
+                size="small"
+                icon="el-icon-refresh"
+                @click="myexaminerefesh"
               >
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="pagination">
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="total"
-          :page-size="data.size"
-          @prev-click="prev"
-          @next-click="prev"
-          @current-change="prev"
-        >
-        </el-pagination>
-      </div>
+                重置</el-button
+              >
+            </div>
+          </div>
+          <div class="table">
+            <div class="table" v-if="myexaminelist.length === 0">
+              <el-table style="width: 100%" border>
+                <el-table-column label="入住人" fixed="left"> </el-table-column>
+                <el-table-column label="门牌号"> </el-table-column>
+                <el-table-column label="小区/楼道/单元"> </el-table-column>
+                <el-table-column label="归属地"> </el-table-column>
+                <el-table-column label="房屋性质"> </el-table-column>
+                <el-table-column label="房屋面积"> </el-table-column>
+                <el-table-column label="实际使用面积"> </el-table-column>
+                <el-table-column label="公摊使用面积"> </el-table-column>
+                <el-table-column label="户型"> </el-table-column>
+                <el-table-column label="房间"> </el-table-column>
+                <el-table-column label="申请人"> </el-table-column>
+                <el-table-column label="职别"> </el-table-column>
+                <el-table-column label="办理形式"> </el-table-column>
+                <el-table-column label="审批类型"> </el-table-column>
+                <el-table-column label="审核状态"> </el-table-column>
+                <el-table-column label="提交时间"> </el-table-column>
+                <el-table-column label="操作" fixed="right" width="180">
+                </el-table-column>
+              </el-table>
+            </div>
+            <div class="table" v-if="myexaminelist.length !== 0">
+              <el-table
+                :data="myexaminelist"
+                style="width: 100%"
+                border
+                max-height="600"
+              >
+                <el-table-column prop="name" label="入住人" fixed="left">
+                </el-table-column>
+                <el-table-column prop="communityName" label="门牌号">
+                  <div slot-scope="scope">
+                    {{ scope.row.house.roomNumber }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="cityName" label="小区/楼道/单元">
+                  <div slot-scope="scope">
+                    {{ scope.row.house.houseEstate + scope.row.house.unit }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="provinceName" label="归属地">
+                </el-table-column>
+                <el-table-column prop="community" label="房屋性质">
+                  <div slot-scope="scope">
+                    {{ scope.row.house.propertyNature }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="roomNumber" label="房屋面积">
+                  <div slot-scope="scope">
+                    {{ scope.row.house.allArea }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="roomNumber" label="实际使用面积">
+                  <div slot-scope="scope">
+                    {{ scope.row.house.actualArea }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="propertyOwner" label="公摊使用面积">
+                  <div slot-scope="scope">
+                    {{ scope.row.house.shareArea }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="roomNumber" label="户型">
+                  <div slot-scope="scope">
+                    {{
+                      scope.row.house.bedroomNum +
+                      "室" +
+                      scope.row.house.parlorNum +
+                      "厅" +
+                      scope.row.house.toiletNum +
+                      "卫"
+                    }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="roomId" label="房间">
+                  <div slot-scope="scope">
+                    {{ scope.row.roomId ? scope.row.roomId : "暂无" }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="name" label="申请人"> </el-table-column>
+                <el-table-column prop="rankName" label="职别">
+                  <div slot-scope="scope">
+                    {{ rankName[scope.row.rankCode - 1].dictLabel }}
+                  </div>
+                </el-table-column>
+                <el-table-column prop="handleType" label="办理形式">
+                </el-table-column>
+                <el-table-column label="审批类型">
+                  <div slot-scope="scope">
+                    <span v-if="scope.row.processCode === 'housing_business'"
+                      >住房审批</span
+                    >
+                    <span v-if="scope.row.processCode === 'house_rent_refund'"
+                      >退房审批审批</span
+                    >
+                  </div>
+                </el-table-column>
+                <el-table-column prop="roomNumber" label="审核状态">
+                  <div slot-scope="scope">
+                    <span v-if="scope.row.status === 0">审核中</span>
+                    <span v-if="scope.row.status === 1">审核通过</span>
+                    <span v-if="scope.row.status === 4">待复审</span>
+                  </div>
+                </el-table-column>
+                <el-table-column prop="updateTime" label="提交时间">
+                </el-table-column>
+                <el-table-column
+                  prop="roomNumber"
+                  label="操作"
+                  fixed="right"
+                  width="180"
+                >
+                  <template slot-scope="scope">
+                    <el-button
+                      type="text"
+                      icon="el-icon-edit"
+                      @click="detile(scope.row)"
+                      >详情</el-button
+                    >
+                    <el-button
+                      type="text"
+                      v-if="scope.row.status === 1"
+                      @click="guidang(scope.row)"
+                      >归档</el-button
+                    >
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+            <div class="pagination">
+              <el-pagination
+                background
+                layout="total,prev, pager, next"
+                :total="myaduitTotal"
+                :page-size="myaduit.size"
+                @prev-click="changemyaduit"
+                @next-click="changemyaduit"
+                @current-change="changemyaduit"
+              >
+              </el-pagination>
+            </div>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </div>
     <el-dialog
       :title="type === 'appor' ? '入住审批' : '入住详情'"
@@ -839,7 +1722,9 @@
                 >
                   <div style="width: 130px">婚姻情况:</div>
                   <span>
-                    {{ this.isture[this.scopeRowForm.marriageCode] }}
+                    {{
+                      this.scopeRowForm.existPurchase == "true" ? "是" : "否"
+                    }}
                   </span>
                 </div>
               </div>
@@ -996,12 +1881,15 @@ import {
   getUserauditList,
   getApprodetile,
 } from "@/api/house/gethouselist";
+import { post } from "@/api/procure/getprocure";
 import { getHistory, getHistoryNode } from "@/api/activite/modle";
 import { gethouseAsset } from "@/api/house/getAsset";
 import { Disablebutton } from "@/utils/button";
 import http from "@/utils/request";
-import { getModle } from "@/api/download/download";
+import { getModle, getEndModle } from "@/api/download/download";
+import { getdict } from "@/api/dict/getdict";
 export default {
+  name: "orderlist",
   data() {
     return {
       length: 1,
@@ -1011,7 +1899,10 @@ export default {
       showDetile: false,
       appordialog: false,
       rentType: ["月", "季", "年"],
-      isture: ["否", "是"],
+      isture: {
+        true: "是",
+        false: "否",
+      },
       form: {
         current: 1,
         houseValue: "",
@@ -1046,28 +1937,7 @@ export default {
             value: "house_rent_refund",
           },
         ],
-        housetype: [
-          {
-            label: "不限",
-            value: null,
-          },
-          {
-            label: "集体宿舍",
-            value: "1",
-          },
-          {
-            label: "干部交流用房",
-            value: "2",
-          },
-          {
-            label: "临时周转用房",
-            value: "3",
-          },
-          {
-            label: "集中工作用饭",
-            value: "4",
-          },
-        ],
+        housetype: [],
         submitList: [],
       },
       apporForm: {
@@ -1076,6 +1946,16 @@ export default {
         file: "",
       },
       data: {
+        // userId: this.$store.state.userinfo.userID,
+        size: 10,
+        current: 1,
+        houseCode: null,
+        handleTypeCode: null,
+        status: null,
+        processCode: null,
+        propertyNatureCode: null,
+      },
+      waitdata: {
         userId: this.$store.state.userinfo.userID,
         size: 10,
         current: 1,
@@ -1085,7 +1965,30 @@ export default {
         processCode: null,
         propertyNatureCode: null,
       },
-      rankName: ["其他干部", "副处级", "正处级", "副司级", "正司级"],
+      waitTotal: "",
+      pashdata: {
+        // userId: this.$store.state.userinfo.userID,
+        size: 10,
+        current: 1,
+        houseCode: null,
+        handleTypeCode: null,
+        status: 1,
+        processCode: null,
+        propertyNatureCode: null,
+      },
+      pashTotal: "",
+      mydata: {
+        applicantId: this.$store.state.userinfo.userID,
+        size: 10,
+        current: 1,
+        houseCode: null,
+        handleTypeCode: null,
+        status: 1,
+        processCode: null,
+        propertyNatureCode: null,
+      },
+      myTotal: "",
+      rankName: [],
       scopeRowForm: {},
       flowForm: [],
       cityParams: [],
@@ -1100,6 +2003,20 @@ export default {
       total: 0,
       historylist: [],
       sexlist: ["男", "女"],
+      pashData: [],
+      myData: [],
+      waitData: [],
+      myaduit: {
+        size: 10,
+        current: 1,
+        houseCode: null,
+        handleTypeCode: null,
+        processCode: null,
+        propertyNatureCode: null,
+        examineUser: this.$store.state.userinfo.userID,
+      },
+      myaduitTotal: 0,
+      myexaminelist: [],
     };
   },
   methods: {
@@ -1207,6 +2124,18 @@ export default {
           console.error(error);
         });
     },
+    mysearch() {
+      this.myData = [];
+      this.getmyData();
+    },
+    wasearch() {
+      this.waitData = [];
+      this.getwaitData();
+    },
+    pasearch() {
+      this.pashData = [];
+      this.getpassData();
+    },
     //获取申请列表
     getApproList() {
       gethouseApproList(this.current)
@@ -1258,6 +2187,27 @@ export default {
       this.form.submitList = [];
       this.getuserApprolist();
     },
+    //翻页
+    passprev(index) {
+      console.log(index);
+      this.pashdata.current = index;
+      this.pashData = [];
+      this.getpassData();
+    },
+    //翻页
+    wapassprev(index) {
+      console.log(index);
+      this.waitdata.current = index;
+      this.waitData = [];
+      this.getwaitData();
+    },
+    //翻页
+    mypassprev(index) {
+      console.log(index);
+      this.mydata.current = index;
+      this.myData = [];
+      this.getmyData();
+    },
     //省市选择
     changeCity(value) {
       this.data.houseCode = value;
@@ -1292,6 +2242,28 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+    },
+    //获取字典
+    getdictlist() {
+      getdict("rank_type")
+        .then((res) => {
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.rankName.push(list[i]);
+          }
+          console.log(this.rankName);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+      getdict("property_nature").then((res) => {
+        const list = res.data.records;
+        const length = list.length;
+        for (var i = 0; i < length; i++) {
+          this.form.housetype.push(list[i]);
+        }
+      });
     },
     //上传文件
     upload(data) {
@@ -1331,16 +2303,150 @@ export default {
     down(row) {
       getModle(row);
     },
+    guidang(row) {
+      getEndModle(row.id, "/houseLodging/examineRecord").then((res) => {
+        console.log(res);
+        window.location.href = res.data;
+      });
+    },
     slice(row) {
       const index = row.lastIndexOf("/");
       const text = row.substr(index + 1);
       return text;
     },
+    getpassData() {
+      getUserauditList(this.pashdata)
+        .then((res) => {
+          this.pashTotal = Number(res.data.total);
+          const list = res.data.records;
+          const lenght = list.length;
+          for (var i = 0; i < lenght; i++) {
+            this.pashData.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    getmyData() {
+      getUserauditList(this.mydata)
+        .then((res) => {
+          this.myTotal = Number(res.data.total);
+          const list = res.data.records;
+          const lenght = list.length;
+          for (var i = 0; i < lenght; i++) {
+            this.myData.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    getwaitData() {
+      getUserauditList(this.waitdata)
+        .then((res) => {
+          this.waitTotal = Number(res.data.total);
+          const list = res.data.records;
+          const lenght = list.length;
+          for (var i = 0; i < lenght; i++) {
+            this.waitData.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    //获取我我审核的
+    getMyExamine() {
+      getUserauditList(this.myaduit)
+        .then((res) => {
+          this.myaduitTotal = Number(res.data.total);
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.myexaminelist.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    changemyaduit(value) {
+      this.myaduit.current = value;
+      this.myexaminelist = [];
+      this.getMyExamine();
+    },
+    myexamineserch() {
+      this.myexaminelist = [];
+      this.getMyExamine();
+    },
+    myexaminerefesh() {
+      this.myaduit = {
+        current: 1,
+        size: 10,
+        status: null,
+        procureType: null,
+        procureCategory: null,
+        name: null,
+        examineId: this.$store.state.userinfo.userID,
+      };
+      this.myexaminelist = [];
+      this.getMyExamine();
+    },
+    deleted(row) {
+      this.$confirm("请确认是否删除", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+      })
+        .then(() => {
+          post("/houseLodging/remove", row.id)
+            .then((res) => {
+              this.$message({
+                title: "成功",
+                message: "删除成功",
+                type: "success",
+              });
+              this.form.submitList = [];
+              this.getuserApprolist();
+              this.pashData = [];
+              this.getpassData();
+              this.waitData = [];
+              this.getwaitData();
+              this.myData = [];
+              this.getmyData();
+              this.myexaminelist = [];
+              this.getMyExamine();
+            })
+            .catch((error) => {});
+        })
+        .catch(() => {
+          return false;
+        });
+    },
+    isDesiable(type) {
+      return Disablebutton(type);
+    },
   },
-  mounted() {
-    this.getmap();
+
+  activated() {
+    this.form.submitList = [];
     this.getuserApprolist();
+    this.pashData = [];
+    this.getpassData();
+    this.waitData = [];
+    this.getwaitData();
+    this.myData = [];
+    this.getmyData();
+    this.myexaminelist = [];
+    this.getMyExamine();
+    this.getmap();
+    this.getdictlist();
   },
+  // computed: {
+  //   pashData() {
+  //     return this.form.submitList.filter((item) => item.status === 1);
+  //   },
+  // },
 };
 </script>
 

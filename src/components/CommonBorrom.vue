@@ -74,7 +74,6 @@
       justify-content: space-around;
       width: 100%;
       .btmlist {
- 
         .el-button {
           background-color: rgba($color: #d7d7d7, $alpha: 0.1);
           color: #fff;
@@ -100,7 +99,7 @@ export default {
         { path: "/index/one", name: "indexone", lable: "总览" },
         { path: "/index/two", name: "indextwo", lable: "数据池" },
         { path: "/index/three", name: "indexthree", lable: "采购审批" },
-        { path: "/index/four", name: "indexfour", lable: "公共住房" },
+        { path: "/index/four", name: "indexfour", lable: "公有住房" },
       ],
       times: {
         year: "0",

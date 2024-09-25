@@ -2,7 +2,7 @@
   <div class="container">
     <div class="right">
       <div class="top">
-        <div class="hader">公共住房</div>
+        <div class="hader">公有住房</div>
         <el-divider></el-divider>
         <div class="list">
           <div class="title">

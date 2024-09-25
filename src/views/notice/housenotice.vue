@@ -82,7 +82,7 @@
                 </el-table-column>
                 <el-table-column label="办理形式">
                   <div slot-scope="scope">
-                    {{ form.handletype[scope.row.handleTypeCode - 1].label }}
+                    {{ scope.row.handleType }}
                   </div>
                 </el-table-column>
                 <el-table-column
@@ -100,7 +100,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="data.total"
                   :page-size="data.size"
                   @prev-click="changepage"
@@ -210,7 +210,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="datatwo.total"
                   :page-size="datatwo.size"
                 >
@@ -317,7 +317,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="dataone.total"
                   :page-size="dataone.size"
                 >
@@ -1018,6 +1018,7 @@ import {
 import { getApprodetile } from "@/api/house/gethouselist";
 import { getMaplist } from "@/api/map";
 export default {
+  name: "orderlist",
   data() {
     return {
       tab: "1",
@@ -1066,14 +1067,14 @@ export default {
         current: "1",
         total: "",
         houseCode: null,
-        onticeUser: this.$store.state.userinfo.userID,
+        noticeUser: this.$store.state.userinfo.userID,
         propertyNatureCode: null,
       },
       dataone: {
         size: 8,
         current: "1",
         total: "",
-        onticeUser: this.$store.state.userinfo.userID,
+        noticeUser: this.$store.state.userinfo.userID,
         houseCode: null,
         propertyNatureCode: null,
       },
@@ -1081,7 +1082,7 @@ export default {
         size: 8,
         current: "1",
         total: "",
-        onticeUser: this.$store.state.userinfo.userID,
+        noticeUser: this.$store.state.userinfo.userID,
         houseCode: null,
         propertyNatureCode: null,
       },

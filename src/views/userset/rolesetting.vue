@@ -81,7 +81,16 @@
         </el-table-column>
       </el-table>
       <div class="pagination">
-        <el-pagination background layout="prev, pager, next"> </el-pagination>
+        <el-pagination
+          background
+          layout="total,prev, pager, next"
+          :page-size="data.size"
+          :total="total"
+          @prev-click="changepage"
+          @next-click="changepage"
+          @current-change="changepage"
+        >
+        </el-pagination>
       </div>
     </div>
     <el-dialog title="新增角色" width="600px" center :visible.sync="addlog">
@@ -94,6 +103,12 @@
         </el-form-item>
         <el-form-item label="角色顺序：">
           <el-input type="number" v-model="form.roleSort"></el-input>
+        </el-form-item>
+        <el-form-item label="角色是否拥有最高权限">
+          <el-select v-model="form.tallPower">
+            <el-option label="是" :value="true"></el-option>
+            <el-option label="否" :value="false"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -111,6 +126,12 @@
         </el-form-item>
         <el-form-item label="角色顺序：">
           <el-input type="number" v-model="deit.roleSort"></el-input>
+        </el-form-item>
+        <el-form-item label="角色是否拥有最高权限">
+          <el-select v-model="deit.tallPower">
+            <el-option label="是" :value="true"></el-option>
+            <el-option label="否" :value="false"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -189,6 +210,7 @@ import {
 } from "@/api/role/role";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       addrouter: false,
@@ -198,7 +220,7 @@ export default {
       deptUser: [],
       dept: [],
       data: {
-        siaz: 10,
+        size: 10,
         current: 1,
         total: null,
       },
@@ -237,6 +259,7 @@ export default {
         height: "60px",
         overflow: "hidden",
       },
+      total: 0,
     };
   },
   methods: {
@@ -245,6 +268,7 @@ export default {
         .then((res) => {
           for (var i = 0; i < res.data.records.length; i++) {
             this.rolelist.push(res.data.records[i]);
+            this.total = Number(res.data.total);
           }
         })
         .catch((error) => {
@@ -391,6 +415,21 @@ export default {
         });
         this.$router.go();
       });
+    },
+    changepage(value) {
+      this.data.current = value;
+      this.rolelist = [];
+      getrole(this.data)
+        .then((res) => {
+          this.rolelist = res.data.records;
+          // for (var i = 0; i < res.data.records.length; i++) {
+          //   this.rolelist.push(res.data.records[i]);
+          //   this.total = Number(res.data.total);
+          // }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   mounted() {

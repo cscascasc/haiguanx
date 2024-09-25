@@ -6,7 +6,7 @@ export function houseloding(data) {
         params: {
             size: data.size,
             current: data.current,
-            onticeUser: data.onticeUser,
+            noticeUser: data.noticeUser,
             houseCode: data.houseCode,
             propertyNatureCode: data.propertyNatureCode
         }
@@ -20,7 +20,7 @@ export function houseExpire(data) {
         params: {
             size: data.size,
             current: data.current,
-            onticeUser: data.onticeUser,
+            noticeUser: data.noticeUser,
             houseCode: data.houseCode,
             propertyNatureCode: data.propertyNatureCode
         }
@@ -35,7 +35,7 @@ export function houseWarning(data) {
         params: {
             size: data.size,
             current: data.current,
-            onticeUser: data.onticeUser,
+            noticeUser: data.noticeUser,
             houseCode: data.houseCode,
             propertyNatureCode: data.propertyNatureCode
         }

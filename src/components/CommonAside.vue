@@ -123,7 +123,7 @@ export default {
         // {
         //   path: "",
         //   name: "",
-        //   lable: "公共住房",
+        //   lable: "公有住房",
         //   children: [
         //     {
         //       path: "/public1",

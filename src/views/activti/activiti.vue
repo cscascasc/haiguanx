@@ -90,7 +90,7 @@
         <div class="pagination">
           <el-pagination
             background
-            layout="prev, pager, next"
+            layout="total,prev, pager, next"
             :total="total"
             :page-size="form.size"
             @prev-click="changepage"

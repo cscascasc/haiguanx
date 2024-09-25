@@ -20,7 +20,8 @@
         </div>
         <el-select
           v-model="form.nodeLevelCode"
-          clearable filterable
+          clearable
+          filterable
           placeholder="节点级别"
         >
           <el-option
@@ -34,7 +35,8 @@
         </el-select>
         <el-select
           v-model="form.businessAreaCode"
-          clearable filterable
+          clearable
+          filterable
           placeholder="业务领域"
         >
           <el-option
@@ -48,7 +50,8 @@
         >
         <el-select
           v-model="form.businessSubcategoriesCode"
-          clearable filterable
+          clearable
+          filterable
           placeholder="业务小类"
         >
           <el-option
@@ -304,7 +307,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="total"
           :page-size="form.size"
           @prev-click="changepage"
@@ -353,6 +356,7 @@ import {
 } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       form: {
@@ -481,7 +485,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.tabledata = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
@@ -501,7 +506,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.tabledata = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
@@ -586,7 +592,8 @@ export default {
             message: res.msg,
             type: "success",
           });
-          this.$router.go();
+          this.tabledata = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
@@ -644,12 +651,14 @@ export default {
               message: message,
               type: "success",
             });
-            this.$router.go();
+            this.tabledata = [];
+            this.gettabledata();
           })
           .catch((error) => {
             console.error(error);
           });
-        this.$router.go(0);
+        this.tabledata = [];
+        this.gettabledata();
       });
     },
   },

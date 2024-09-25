@@ -4,7 +4,9 @@
       <DataHeader />
     </div>
     <div class="viewcontainer">
-      <router-view></router-view>
+      <keep-alive include="orderlist">
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -12,6 +14,7 @@
 <script>
 import DataHeader from "@/components/DataHeader.vue";
 export default {
+  name: "orderlist",
   data() {
     return {};
   },

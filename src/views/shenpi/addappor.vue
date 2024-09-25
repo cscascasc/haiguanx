@@ -89,11 +89,7 @@
           label="采购方式"
         ></el-table-column>
         <el-table-column prop="budgetAmount" label="采购金额"></el-table-column>
-        <el-table-column
-          prop="paymentType"
-          label="付款方式"
-        >  
-       </el-table-column>
+        <el-table-column prop="paymentType" label="付款方式"> </el-table-column>
         <el-table-column prop="contractNum" label="合同编号"></el-table-column>
         <el-table-column prop="dept.name" label="需求部门"></el-table-column>
         <el-table-column prop="contacts" label="联系人"></el-table-column>
@@ -111,7 +107,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="total"
           :page-size="data.size"
           @prev-click="change"
@@ -405,6 +401,7 @@ import { getdeptUser, getdept, getdeptcustoms } from "@/api/dept/getdept";
 import { getdict } from "@/api/dict/getdict";
 import { exportObject } from "@/api/download/download";
 export default {
+  name: "orderlist",
   data() {
     return {
       tablelist: [],
@@ -584,7 +581,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.tablelist = [];
+          this.getlist();
         })
         .catch((error) => {
           console.log(error);

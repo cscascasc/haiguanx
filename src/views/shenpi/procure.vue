@@ -447,11 +447,13 @@
                   textOverflow: 'ellipsis',
                 }"
               >
-                {{
-                  subitem.userName
-                    ? subitem.userName + `(${item.deptList[0].splitDept})`
-                    : "审核人"
-                }}
+                <span :title="`${subitem.userName}(${subitem.userDept})`">
+                  {{
+                    subitem.userName
+                      ? subitem.userName + "(" + subitem.userDept + ")"
+                      : "审核人"
+                  }}
+                </span>
               </div>
               <div
                 class="option"
@@ -499,6 +501,38 @@
                 {{ subitem.createTime }}
               </div>
             </el-button>
+          </div>
+          <div
+            :style="{
+              width: '90%',
+            }"
+            v-if="item.currentNodeUserMap && nodelog"
+          >
+            <div
+              class="nodeboxchildren"
+              v-for="subitem in item.currentNodeUserMap"
+              :key="subitem.id"
+            >
+              <el-button type="primary">
+                <div
+                  class="title"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }"
+                >
+                  <span :title="`${subitem.user}(${subitem.dept})`">
+                    {{
+                      subitem.user
+                        ? subitem.user + "(" + subitem.dept + ")"
+                        : "审核人"
+                    }}
+                  </span>
+                </div>
+              </el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -932,7 +966,11 @@ export default {
           this.historylist = res.data;
           this.getfile(this.historylist);
           for (var i = 0; i < res.data.length; i++) {
-            if (path + 1 === res.data[i].nodeSort) {
+            if (
+              path + 1 === res.data[i].nodeSort ||
+              path + 2 === res.data[i].nodeSort
+            ) {
+              console.log(path + 2);
               this.getdictuserlist(res.data[i].deptList);
               this.deptPath = res.data[i].deptList;
               var array = res.data[i].deptList;
@@ -942,6 +980,7 @@ export default {
                 });
               }
               console.log(this.nextTitle, "a");
+              break;
             }
           }
           // console.log(this.historylist);
@@ -970,9 +1009,13 @@ export default {
                     message: message,
                     type: "success",
                   });
+                  this.data.nextExamineUser = "";
+                  this.data.handleIds = "";
                   this.$router.back();
                 })
                 .catch((error) => {
+                  this.data.nextExamineUser = "";
+                  this.data.handleIds = "";
                   console.error(error);
                 });
             })

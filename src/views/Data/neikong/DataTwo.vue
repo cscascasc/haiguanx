@@ -1,22 +1,25 @@
 <template>
   <div class="container">
     <div class="top">
-      <control-hearder/>
+      <control-hearder />
     </div>
     <div class="viewcontainer">
-       <router-view></router-view>
+      <keep-alive include="orderlist">
+        <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
 
 <script>
-import ControlHearder from './ControlHearder.vue';
+import ControlHearder from "./ControlHearder.vue";
 export default {
+  name: "orderlist",
   data() {
     return {};
   },
   components: {
-    ControlHearder
+    ControlHearder,
   },
 };
 </script>
@@ -31,11 +34,10 @@ export default {
     padding-top: 20px;
     height: 40px;
   }
-  .viewcontainer{
+  .viewcontainer {
     width: 100%;
     height: calc(100vh - 100px);
     background-color: #fff;
-    
   }
 }
 </style>

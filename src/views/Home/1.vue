@@ -29,10 +29,12 @@
             处理率:
             <div class="data">
               {{
-                data.problemCorrect
-                  ? Math.round(
-                      (data.problemCorrect / data.problemTotal) * 100
-                    ) + "%"
+                data
+                  ? data.problemCorrect
+                    ? Math.round(
+                        (data.problemCorrect / data.problemTotal) * 100
+                      ) + "%"
+                    : "暂无数据"
                   : "暂无数据"
               }}
             </div>

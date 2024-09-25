@@ -12,7 +12,7 @@
       </div>
     </div>
     <div class="table">
-      <el-table max-height="680" :data="routerlist" row-key="id" border >
+      <el-table max-height="680" :data="routerlist" row-key="id" border>
         <el-table-column prop="menuName" label="菜单名称"></el-table-column>
         <el-table-column prop="component" label="组件"></el-table-column>
         <el-table-column prop="component" label="类型">
@@ -142,6 +142,7 @@ import {
 } from "@/api/dept/router";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       detalelog: false,
@@ -157,7 +158,7 @@ export default {
         visible: null,
         component: null,
         perm: null,
-        redirect:null
+        redirect: null,
       },
       Edit: {},
       type: {

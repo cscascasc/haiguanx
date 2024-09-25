@@ -193,6 +193,11 @@
           label="被审计海关"
         ></el-table-column>
         <el-table-column
+          prop="auditTimeFrame"
+          label="审计时间范围"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           prop="responsibleDeptList"
           label="整改责任部门"
           align="center"
@@ -204,8 +209,9 @@
             </el-button>
           </div>
         </el-table-column>
+
         <el-table-column
-          prop="auditTimeFrame"
+          prop="rectificationDeadline"
           label="整改期限"
           align="center"
         ></el-table-column>
@@ -265,7 +271,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="total"
           :page-size="form.size"
           @prev-click="changepage"
@@ -286,6 +292,7 @@ import {
 } from "@/api/data/wenti/getWenti";
 import { getdept } from "@/api/dept/getdept";
 export default {
+  name: "orderlist",
   data() {
     return {
       state: "",

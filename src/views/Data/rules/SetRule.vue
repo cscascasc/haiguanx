@@ -69,6 +69,7 @@ import { getRuleList, activitRule, editRule, addRule } from "@/api/getRules";
 import { Disablebutton } from "@/utils/button";
 import { getAlldept, getdeptUser } from "@/api/dept/getdept";
 export default {
+  name: "orderlist",
   data() {
     return {
       tableData: [],
@@ -117,7 +118,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.tableData = [];
+          this.getRuleList();
         })
         .catch((error) => {
           console.error(error);
@@ -211,7 +213,8 @@ export default {
             title: "成功",
             type: "success",
           });
-          this.$router.go();
+          this.tableData = [];
+          this.getRuleList();
         })
         .catch((error) => {
           console.error(error);

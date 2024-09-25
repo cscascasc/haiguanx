@@ -105,7 +105,7 @@
         <div class="pagination">
           <el-pagination
             background
-            layout="prev, pager, next"
+            layout="total,prev, pager, next"
             :total="total"
             :page-size="form.size"
             @prev-click="changepage"
@@ -136,6 +136,7 @@ import { getdept, getdeptcustoms } from "@/api/dept/getdept";
 import { exportObject, importObject, getModle } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       devmentValue: "",
@@ -307,7 +308,7 @@ export default {
             message: res.msg,
             type: "success",
           });
-          this.$router.go();
+          this.getlist();
         })
         .catch((error) => {
           console.error(error);

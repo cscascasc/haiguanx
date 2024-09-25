@@ -86,7 +86,7 @@
       </div>
       <el-pagination
         background
-        layout="prev, pager, next"
+        layout="total,prev, pager, next"
         :total="total"
         :page-size="form.size"
         @prev-click="changepage"
@@ -876,7 +876,7 @@
       <div class="pagination" style="display: flex; justify-content: flex-end">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="comtotal"
           :page-size="comform.size"
           @prev-click="changepage"

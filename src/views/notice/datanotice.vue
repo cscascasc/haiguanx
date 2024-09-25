@@ -4,7 +4,7 @@
       <el-tabs>
         <el-tab-pane label="内控规范提示">
           <div class="content">
-            <div class="table" >
+            <div class="table">
               <el-table :data="inaeranotice" border>
                 <el-table-column
                   prop="nodeExplain"
@@ -12,7 +12,9 @@
                 ></el-table-column>
                 <el-table-column prop="" label="关联问题">
                   <div slot-scope="scope">
-                    {{ scope.row.problemBase ? scope.row.problemBase : '待关联'}}
+                    {{
+                      scope.row.problemBase ? scope.row.problemBase : "待关联"
+                    }}
                   </div>
                 </el-table-column>
                 <el-table-column
@@ -34,7 +36,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="form.total"
                   :page-size="form.size"
                   @prev-click="changepageone"
@@ -77,7 +79,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="comform.total"
                   :page-size="comform.size"
                 >
@@ -113,7 +115,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="warningform.total"
                   :page-size="warningform.size"
                 >
@@ -149,7 +151,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="overform.total"
                   :page-size="overform.size"
                 >
@@ -249,7 +251,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="tablelistform.total"
           :page-size="tablelistform.size"
           @prev-click="changepage"
@@ -348,7 +350,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="tablelistform.total"
           :page-size="tablelistform.size"
           @prev-click="changepage"
@@ -370,6 +372,7 @@ import {
   getCommonalist,
 } from "@/api/notice/getdatanotice";
 export default {
+  name: "orderlist",
   data() {
     return {
       comdialog: false,

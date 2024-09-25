@@ -165,7 +165,7 @@
         <div class="formitem">
           <el-form-item label="本人及家庭成员工作地是否购买或承租保障性住房：">
             <el-input :value="isTrue[houselist.existPurchase]"></el-input>
-          </el-form-item> 
+          </el-form-item>
         </div>
         <div class="formitem">
           <el-form-item label="申请说明">
@@ -224,13 +224,15 @@
           <el-radio-group v-model="data.judge">
             <el-radio :label="0">通过</el-radio>
             <el-radio :label="1">拒绝</el-radio>
-            <el-radio :label="2" v-if="isMutile">处理</el-radio>
+            <el-radio :label="2" v-if="!isMutile">处理</el-radio>
           </el-radio-group>
         </el-form-item>
+        <!-- 不是会签-->
         <el-form-item
           v-if="
-            data.judge === 0 &&
-            nodeName !== 'countersigning_by_the_leadership_group'
+            (data.judge === 0 &&
+              nodeName !== 'countersigning_by_the_leadership_group') ||
+            (data.judge === 0 && isMutile)
           "
           :label="item.name + ' 审批人：'"
           v-for="(item, index) in dictUser"
@@ -257,7 +259,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <div v-if="data.judge === 0 && deptId === proformDeptId">
+        <!--是会签-->
+        <div v-if="data.judge === 0 && deptId == proformDeptId && isMutile">
           <el-form-item
             :label="item.name + ' 审批人：'"
             v-for="(item, index) in dictUser"
@@ -614,6 +617,7 @@ export default {
       proformDeptId: "",
       isMutile: true,
       sexlist: ["男", "女"],
+      huiqian: "",
     };
   },
   created() {
@@ -701,9 +705,9 @@ export default {
         this.nodeName = res.data.nodeId;
         this.data.contractNum = res.data.contractNum;
         this.tastStatus = res.data.status;
-        if (res.data.performDeptId) {
+        if (res.data.isMulti) {
           this.proformDeptId = res.data.performDeptId;
-          this.isMutile = false;
+          this.isMutile = res.data.isMulti;
         }
         if (this.tastStatus === 3) {
           this.title = "重新提交";

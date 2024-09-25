@@ -107,7 +107,7 @@
         <div class="pagination">
           <el-pagination
             background
-            layout="prev, pager, next"
+            layout="total,prev, pager, next"
             :total="total"
             :page-size="form.size"
             @prev-click="changepage"
@@ -139,6 +139,24 @@
       width="40%"
       center
     >
+      <div class="seach">
+        <el-form size="small" inline>
+          <el-form-item label="海关">
+            <el-select v-model="flowForm.custom">
+              <el-option
+                v-for="item in costomList"
+                :key="item.id"
+                :value="item.name"
+                :label="item.name"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="flowReset">重置</el-button>
+            <el-button type="primary" @click="flowSerch">查询</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
       <div class="taskContainer">
         <el-form v-model="TaskNote">
           <div
@@ -291,7 +309,7 @@ import {
   editTaskNote,
   delateFlow,
 } from "@/api/activite/modle";
-import { getAlldept, getdeptUser } from "@/api/dept/getdept";
+import { getAlldept, getdeptUser, getdept } from "@/api/dept/getdept";
 import { Disablebutton } from "@/utils/button";
 import { decryptlong } from "@/utils/jsencrypt";
 export default {
@@ -332,6 +350,10 @@ export default {
       deptUser: [], //部门员工
       deptLeader: [], //部门领导
       total: 0,
+      costomList: [],
+      flowForm: {
+        custom: this.$store.state.userinfo.userCustoms,
+      },
     };
   },
   methods: {
@@ -390,7 +412,12 @@ export default {
       this.TaskNote = [];
       const value = {};
       const custom = this.$store.state.userinfo.userCustoms;
-      getTaskNote(row.id, custom)
+      this.flowForm.id = row.id;
+      let form = {
+        // id: row.id,
+        ...this.flowForm,
+      };
+      getTaskNote(form)
         .then((res) => {
           console.log(res.data, "data");
           const list = res.data;
@@ -419,6 +446,9 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+      getdept().then((res) => {
+        this.costomList = res.data;
+      });
     },
     //提交流程审批节点
     submitTask() {
@@ -583,6 +613,54 @@ export default {
       if (item.performDept) {
         return item.performDept.name;
       }
+    },
+    flowReset() {
+      this.TaskNote = [];
+      const value = {};
+      this.flowForm.custom = this.$store.state.userinfo.userCustoms;
+      let form = {
+        ...this.flowForm,
+      };
+      getTaskNote(form)
+        .then((res) => {
+          console.log(res.data, "data");
+          const list = res.data;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            if (list[i].isDefDept) {
+              delete list[i].deptIds;
+            }
+            this.TaskNote.push(list[i]);
+            this.deptValue.push(value);
+            this.deptleaderValue.push(value);
+          }
+          this.dialogEdit = true;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    flowSerch() {
+      this.TaskNote = [];
+      const value = {};
+      getTaskNote(this.flowForm)
+        .then((res) => {
+          console.log(res.data, "data");
+          const list = res.data;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            if (list[i].isDefDept) {
+              delete list[i].deptIds;
+            }
+            this.TaskNote.push(list[i]);
+            this.deptValue.push(value);
+            this.deptleaderValue.push(value);
+          }
+          this.dialogEdit = true;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
   mounted() {

@@ -18,7 +18,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="采购类别：">
-          <el-select v-model="form.procureCategory" clearable >
+          <el-select v-model="form.procureCategory" clearable>
             <el-option
               v-for="item in procureCategory"
               :key="item.id"
@@ -49,8 +49,7 @@
         <el-table-column prop="procureWayName" label="采购方式">
         </el-table-column>
         <el-table-column prop="budgetAmount" label="采购金额"></el-table-column>
-        <el-table-column prop="paymentType" label="付款方式">
-        </el-table-column>
+        <el-table-column prop="paymentType" label="付款方式"> </el-table-column>
         <el-table-column prop="contractNum" label="合同编号"></el-table-column>
         <el-table-column width="200" prop="dept.allPath" label="需求部门">
         </el-table-column>
@@ -68,7 +67,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="total"
           :page-size="form.size"
           @prev-click="changepage"
@@ -201,6 +200,7 @@ import { getpurchaseExamine } from "@/api/notice/getobjectnotice";
 import { getprocureDetil } from "@/api/procure/getprocure";
 import { getdict } from "@/api/dict/getdict";
 export default {
+  name: "orderlist",
   data() {
     return {
       detileialog: false,
@@ -210,7 +210,7 @@ export default {
         procureCategory: null,
         size: 9,
         current: 1,
-        onticeUser:this.$store.state.userinfo.userID
+        noticeUser: this.$store.state.userinfo.userID,
       },
       total: 0,
       detilelist: {},
@@ -278,7 +278,6 @@ export default {
       });
     },
     serch() {
-
       getpurchaseExamine(this.form)
         .then((res) => {
           this.total = Number(res.data.total);
@@ -291,9 +290,9 @@ export default {
           console.error(error);
         });
     },
-    refesch(){
-      this.$router.go()
-    }
+    refesch() {
+      this.$router.go();
+    },
   },
   mounted() {
     this.getdata();

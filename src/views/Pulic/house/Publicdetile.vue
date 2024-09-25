@@ -74,18 +74,18 @@
                 },
               ]"
             >
-              <el-select
-                v-model="formList.twonValue"
-                :placeholder="houselist.communityName"
+              <el-input
+                v-model="formList.address"
+                :placeholder="houselist.address"
                 :disabled="type === 'detile' ? true : false"
               >
-                <el-option
+                <!-- <el-option
                   v-for="item in formList.townParams"
                   :key="item.townName"
                   :label="item.townName"
                   :value="item.id"
-                ></el-option>
-              </el-select>
+                ></el-option> -->
+              </el-input>
             </el-form-item>
             <el-form-item
               label="小区名称："
@@ -223,9 +223,9 @@
               >
                 <el-option
                   v-for="item in formList.houseStyle"
-                  :key="item.style"
-                  :label="item.style"
-                  :value="item.value"
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
                 ></el-option> </el-select
             ></el-form-item>
           </div>
@@ -245,10 +245,9 @@
               <div class="selectgourp">
                 <div class="select-item">
                   <el-select
-                    v-model="formList.roomValue"
+                    v-model="houselist.bedroomNum"
                     @change="changeRoom"
-                    disabled
-                    :placeholder="houselist.bedroomNum"
+                    :disabled="false"
                   >
                     <el-option
                       v-for="item in formList.roomNum"
@@ -260,11 +259,7 @@
                   <span>室</span>
                 </div>
                 <div class="select-item">
-                  <el-select
-                    v-model="formList.livingValue"
-                    :placeholder="houselist.parlorNum"
-                    disabled
-                  >
+                  <el-select v-model="houselist.parlorNum" :disabled="false">
                     <el-option
                       v-for="item in formList.livingNum"
                       :key="item.num"
@@ -275,11 +270,7 @@
                   <span>厅</span>
                 </div>
                 <div class="select-item">
-                  <el-select
-                    v-model="formList.washValue"
-                    :placeholder="houselist.toiletNum"
-                    disabled
-                  >
+                  <el-select v-model="houselist.toiletNum" :disabled="false">
                     <el-option
                       v-for="item in formList.washNum"
                       :key="item.num"
@@ -297,9 +288,9 @@
         <div class="form">
           <div class="formitem">
             <el-form-item
-              v-for="(item, index) in houselist.houseDetails.roomAreaList"
-              :key="index"
-              :label="index + 1 + '室面积'"
+              v-for="item in formList.roomState"
+              :key="item.key"
+              :label="item.label"
               prop="roomState"
               :rules="[
                 {
@@ -308,12 +299,7 @@
                 },
               ]"
             >
-              <el-input
-                v-model="item.value"
-                type="number"
-                :placeholder="item"
-                disabled
-              >
+              <el-input v-model="item.value" type="number">
                 <i slot="suffix" style="font-size: 24px">㎡</i>
               </el-input></el-form-item
             >
@@ -334,7 +320,7 @@
             >
               <el-input
                 v-model="formList.canquanman"
-                :placeholder="houselist.certificateTitle"
+                :placeholder="houselist.propertyOwner"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -350,7 +336,7 @@
             >
               <el-input
                 v-model="formList.fangchanzhen"
-                :placeholder="houselist.propertyOwner"
+                :placeholder="houselist.certificateTitle"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -470,7 +456,7 @@
         <div class="form">
           <div class="formitem">
             <div style="display: flex">
-              <div class="img">
+              <!-- <div class="img">
                 <el-image
                   cover
                   style="width: 150px; height: 150x"
@@ -483,15 +469,17 @@
                     加载中<span class="dot">...</span>
                   </div>
                 </el-image>
-              </div>
-              <div class="imgload" v-if="type === 'edit'">
+              </div> -->
+              <div class="imgload">
                 <el-upload
+                  :disabled="type != 'edit'"
                   action="http"
                   list-type="picture-card"
                   accept=".jpg ,.png, .pfd, .svg"
                   :on-preview="handlePictureCardPreview"
                   :on-remove="handleRemove"
                   :http-request="handleimgup"
+                  :file-list="filelist"
                 >
                   <i class="el-icon-plus"></i>
                 </el-upload>
@@ -507,7 +495,7 @@
             </div>
           </div>
         </div>
-        <div class="solt">房屋资产:</div>
+        <!-- <div class="solt">房屋资产:</div>
         <el-table
           :data="assislist"
           border
@@ -527,7 +515,7 @@
             label="取得日期"
           ></el-table-column>
           <el-table-column prop="usefulLife" label="使用年限"></el-table-column>
-        </el-table>
+        </el-table> -->
         <div class="solt">备注:</div>
         <div class="form">
           <el-form-item label="备注：">
@@ -575,6 +563,7 @@ import { getMaplist } from "@/api/map";
 import { gethouseAsset } from "@/api/house/getAsset";
 import { getHouseList, gethousedetile } from "@/api/house/gethouselist";
 import { editHouse } from "@/api/house/post";
+import { getdict } from "@/api/dict/getdict";
 export default {
   data() {
     return {
@@ -585,24 +574,7 @@ export default {
         areaList: [],
         countyParams: [],
         townParams: [],
-        houseStyle: [
-          {
-            style: "集体用房",
-            value: "1",
-          },
-          {
-            style: "干部交流用房",
-            value: "2",
-          },
-          {
-            style: "临时周转用房",
-            value: "3",
-          },
-          {
-            style: "集中工人用房",
-            value: "4",
-          },
-        ],
+        houseStyle: [],
         roomNum: [
           { num: "1" },
           { num: "2" },
@@ -670,6 +642,7 @@ export default {
         status: 1,
       },
       url: [],
+      filelist: [],
     };
   },
   methods: {
@@ -681,9 +654,30 @@ export default {
           this.formList.areaList.push(list[i]);
         }
       });
+      getdict("property_nature").then((res) => {
+        const list = res.data.records;
+        const length = list.length;
+        for (var i = 0; i < length; i++) {
+          this.formList.houseStyle.push(list[i]);
+        }
+      });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      if (this.formList.img.indexOf(file.name) != -1) {
+        let list = this.formList.img.split(",");
+        let i;
+        list.filter((item) => item.indexOf(file.name) != -1);
+        list.map((item, index) => {
+          console.log(item, index);
+          if (item.indexOf(file.name) != -1) {
+            i = index;
+          }
+        });
+        list.splice(i, 1);
+        this.formList.img = list.join(",");
+        console.log(i, list, this.formList.img, "1111");
+      }
     },
     handlePictureCardPreview(file) {
       this.formList.dialogImageUrl = file.url;
@@ -739,7 +733,8 @@ export default {
         .then((res) => {
           console.log(res);
           this.url.push(res.data);
-          this.formList.img = this.url.join(",");
+          this.houselist.imageList.push(res.data);
+          this.formList.img = this.houselist.imageList.join(",");
           console.log(this.formList.img, "img");
           const message = res.msg;
           this.$notify({
@@ -757,6 +752,10 @@ export default {
     },
     //提交住房编辑
     submit() {
+      const roomstate = [];
+      for (var i = 0; i < this.formList.roomState.length; i++) {
+        roomstate.push(this.formList.roomState[i].value);
+      }
       const list = {
         id: this.houselist.id,
         createTime: this.houselist.createTime,
@@ -810,7 +809,7 @@ export default {
         regionName: this.houselist.regionName,
         communityName: this.houselist.communityName,
         houseId: this.houselist.houseDetails.id,
-        roomAreas: this.houselist.houseDetails.roomAreas,
+        // roomAreas: this.houselist.houseDetails.roomAreas,
         waterMeter: this.formList.water
           ? this.formList.water
           : this.houselist.houseDetails.waterMeter,
@@ -829,8 +828,10 @@ export default {
         houseImages: this.formList.img
           ? this.formList.img
           : this.houselist.houseDetails.houseImages,
+        roomAreas: roomstate.join(","),
       };
       console.log(list);
+      // return;
       editHouse(list)
         .then((res) => {
           const message = res.msg;
@@ -896,22 +897,36 @@ export default {
         .then((res) => {
           this.houselist = res.data;
           console.log(this.houselist, "ssss");
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-      gethouseAsset(this.id)
-        .then((res) => {
-          const list = res.data.records;
-          const length = list.length;
-          for (var i = 0; i < length; i++) {
-            this.assislist.push(list[i]);
+          for (let item of this.houselist.imageList) {
+            this.filelist.push({
+              name: "",
+              url: item,
+            });
           }
-          console.log(this.assislist);
+          this.houselist.houseDetails.roomAreaList.map((item, index) => {
+            this.formList.roomState.push({
+              key: index,
+              value: item,
+              label: index + 1 + "室面积",
+            });
+          });
+          console.log(this.formList);
         })
         .catch((error) => {
           console.error(error);
         });
+      // gethouseAsset(this.id)
+      //   .then((res) => {
+      //     const list = res.data.records;
+      //     const length = list.length;
+      //     for (var i = 0; i < length; i++) {
+      //       this.assislist.push(list[i]);
+      //     }
+      //     console.log(this.assislist);
+      //   })
+      //   .catch((error) => {
+      //     console.error(error);
+      //   });
     },
   },
   created() {

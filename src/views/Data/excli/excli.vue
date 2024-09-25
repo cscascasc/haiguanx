@@ -79,6 +79,7 @@ import { getdept, getdeptcustoms } from "@/api/dept/getdept";
 export default {
   data() {
     return {
+      name: "orderlist",
       data: {
         parentId: null,
         year: "2023",

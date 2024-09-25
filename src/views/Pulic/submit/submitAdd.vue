@@ -13,11 +13,11 @@
             <el-form-item label="房屋：">
               <div class="title">
                 {{
-                  HouseList[0].cityName +
-                  HouseList[0].regionName +
-                  HouseList[0].communityName +
-                  HouseList[0].houseEstate +
-                  HouseList[0].unit
+                  (HouseList[0].cityName || "-") +
+                  (HouseList[0].regionName || "-") +
+                  (HouseList[0].communityName || "-") +
+                  (HouseList[0].houseEstate || "-") +
+                  (HouseList[0].unit || "-")
                 }}
               </div>
             </el-form-item>
@@ -229,7 +229,6 @@
             >
               <el-input
                 v-model="houseForm.submitIdCard"
-                type="number"
                 autocomplete="off"
               ></el-input>
             </el-form-item>

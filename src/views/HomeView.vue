@@ -9,7 +9,9 @@
       </el-aside>
       <el-main>
         <div id="mainview">
-          <router-view />
+          <keep-alive include="orderlist">
+            <router-view />
+          </keep-alive>
         </div>
         <!--主路由接口-->
       </el-main>
@@ -68,8 +70,6 @@ export default {
       }
     },
   },
-  created() {
-    
-  },
+  created() {},
 };
 </script>

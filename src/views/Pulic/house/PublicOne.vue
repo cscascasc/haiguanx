@@ -34,11 +34,10 @@
         <el-select v-model="form.propertyNatureCode">
           <el-option
             v-for="item in houseStyle"
-            :key="item.style"
-            :value="item.value"
-            :label="item.style"
+            :key="item.dictValue"
+            :value="item.dictValue"
+            :label="item.dictLabel"
           >
-            {{ item.style }}
           </el-option>
         </el-select>
       </div>
@@ -66,7 +65,7 @@
       </div>
     </div>
     <div class="mid-container">
-      <div class="table" >
+      <div class="table">
         <el-table :data="houseList" style="width: 100%" border max-height="650">
           <el-table-column prop="roomNumber" label="门牌号" fixed="left">
           </el-table-column>
@@ -74,8 +73,7 @@
           </el-table-column>
           <el-table-column prop="cityName" label="市州"> </el-table-column>
           <el-table-column prop="regionName" label="区县"> </el-table-column>
-          <el-table-column prop="communityName" label="社区/街道">
-          </el-table-column>
+          <el-table-column prop="address" label="社区/街道"> </el-table-column>
           <el-table-column prop="propertyNature" label="房屋性质">
           </el-table-column>
           <el-table-column prop="allArea" label="房屋面积"> </el-table-column>
@@ -149,7 +147,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="form.total"
           :page-size="form.size"
           @prev-click="changepage"
@@ -179,7 +177,9 @@ import { getHouseList } from "@/api/house/gethouselist";
 import { houseturnON, housedelect } from "@/api/house/post";
 import { importHouse, exportHouse, getModle } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
+import { getdict } from "@/api/dict/getdict";
 export default {
+  name: "orderlist",
   data() {
     return {
       buttontype: [
@@ -205,24 +205,6 @@ export default {
       townValue: "",
       houseValue: "",
       houseStyle: [],
-      houseStyle: [
-        {
-          style: "集体用房",
-          value: "1",
-        },
-        {
-          style: "干部交流用房",
-          value: "2",
-        },
-        {
-          style: "临时周转用房",
-          value: "3",
-        },
-        {
-          style: "集中工人用房",
-          value: "4",
-        },
-      ],
       show: "",
       value1: "",
       value2: "",
@@ -250,6 +232,13 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+      getdict("property_nature").then((res) => {
+        const list = res.data.records;
+        const length = list.length;
+        for (var i = 0; i < length; i++) {
+          this.houseStyle.push(list[i]);
+        }
+      });
     },
     changeCity(value) {
       this.form.houseCode = value;
@@ -314,7 +303,7 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.getHList();
         })
         .catch((error) => {
           console.error(error);
@@ -334,7 +323,7 @@ export default {
               message: message,
               type: "success",
             });
-            this.$router.go();
+            this.getHList();
           })
           .catch((error) => {
             console.error(error);
@@ -379,7 +368,7 @@ export default {
       const imgData = data.file;
       const form = new FormData();
       form.append("file", imgData);
-      
+
       importHouse(form)
         .then((res) => {
           this.$notify({
@@ -387,7 +376,7 @@ export default {
             message: res.msg,
             type: "success",
           });
-          this.$router.go();
+          this.getHList();
         })
         .catch((error) => {
           console.error(error);

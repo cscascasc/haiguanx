@@ -67,7 +67,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="form.total"
           :page-size="form.size"
           @prev-click="changepage"
@@ -108,7 +108,7 @@
         >
           <el-pagination
             background
-            layout="prev, pager, next"
+            layout="total,prev, pager, next"
             :total="peagtotal"
             :page-size="peagform.size"
             @prev-click="changedictpage"
@@ -235,6 +235,7 @@ import {
 } from "@/api/dict/getdict";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       list: [],

@@ -211,7 +211,7 @@
       <el-pagination
         style="float: right"
         background
-        layout="prev, pager, next"
+        layout="total,prev, pager, next"
         :total="apportotal"
         :page-size="apporform.size"
         @prev-click="changepage"
@@ -434,7 +434,13 @@
                     padding: '2px',
                   }"
                 >
-                  {{ subitem.userName ? subitem.userName : "审核人" }}
+                  <span :title="`${subitem.userName}(${subitem.userDept})`">
+                    {{
+                      subitem.userName
+                        ? subitem.userName + "(" + subitem.userDept + ")"
+                        : "审核人"
+                    }}
+                  </span>
                 </div>
                 <div
                   class="option"
@@ -498,6 +504,38 @@
               </el-button>
             </div>
           </div>
+          <div
+            :style="{
+              width: '90%',
+            }"
+            v-if="item.currentNodeUserMap && nodelog"
+          >
+            <div
+              class="nodeboxchildren"
+              v-for="subitem in item.currentNodeUserMap"
+              :key="subitem.id"
+            >
+              <el-button type="primary">
+                <div
+                  class="title"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }"
+                >
+                  <span :title="`${subitem.user}(${subitem.dept})`">
+                    {{
+                      subitem.user
+                        ? subitem.user + "(" + subitem.dept + ")"
+                        : "审核人"
+                    }}
+                  </span>
+                </div>
+              </el-button>
+            </div>
+          </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -532,6 +570,7 @@ import { Disablebutton } from "@/utils/button";
 import { getHistory, getHistoryNode } from "@/api/activite/modle";
 import { getHouseExainme } from "@/api/getUser";
 export default {
+  // name: "orderlist",
   watch: {
     filterText(val) {
       console.log(val);

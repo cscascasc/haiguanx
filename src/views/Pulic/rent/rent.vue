@@ -169,7 +169,7 @@
           <div class="pagination">
             <el-pagination
               background
-              layout="prev, pager, next"
+              layout="total,prev, pager, next"
               :total="myRentTotal"
               :page-size="myRentForm.size"
               @prev-click="prevMy"
@@ -344,7 +344,7 @@
           <div class="pagination">
             <el-pagination
               background
-              layout="prev, pager, next"
+              layout="total,prev, pager, next"
               :total="total"
               :page-size="form.size"
               @prev-click="prev"
@@ -998,6 +998,7 @@ import { exportRent } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
 import http from "@/utils/request";
 export default {
+  name: "orderlist",
   data() {
     return {
       house: {
@@ -1167,7 +1168,18 @@ export default {
                 message: message,
                 type: "success",
               });
-              this.$router.go();
+              this.rentlist = [];
+              getrentlist(this.form)
+                .then((res) => {
+                  console.log(res);
+                  this.form.total = Number(res.data.total);
+                  for (var i = 0; i < res.data.records.length; i++) {
+                    this.rentlist.push(res.data.records[i]);
+                  }
+                })
+                .catch((error) => {
+                  console.error(error);
+                });
             })
             .catch((error) => {
               console.error(error);

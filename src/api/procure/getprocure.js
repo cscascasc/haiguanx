@@ -113,3 +113,13 @@ export function reAppor(form) {
         }
     )
 }
+
+export function post(url, id) {
+    return http({
+        url: url,
+        method: 'get',
+        params: {
+            ids: id
+        }
+    })
+}

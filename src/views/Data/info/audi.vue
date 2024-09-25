@@ -120,7 +120,7 @@
                       size="small"
                       :type="scope.row.status === 1 ? 'warning' : 'success'"
                       :disabled="disabled('focus:typeone:status')"
-                      @click="Status(scope.row)"
+                      @click="StatusOne(scope.row)"
                     >
                       {{ scope.row.status === 1 ? "下线" : "上线" }}
                     </el-button>
@@ -140,7 +140,7 @@
                     <el-button
                       size="small"
                       type="danger"
-                      @click="opendelateNew(scope.row)"
+                      @click="opendelateNewOne(scope.row)"
                       :disabled="disabled('focus:typeone:delate')"
                       >删除</el-button
                     >
@@ -150,7 +150,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="newtypeone.total"
                   :page-size="newtypeone.form.size"
                   @prev-click="changepageone"
@@ -301,7 +301,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="newtypetwo.total"
                   :page-size="newtypetwo.form.size"
                   @prev-click="changepageone"
@@ -432,7 +432,7 @@
               <div class="pagination">
                 <el-pagination
                   background
-                  layout="prev, pager, next"
+                  layout="total,prev, pager, next"
                   :total="unit.total"
                   :page-size="unit.form.size"
                   @prev-click="unitpageone"
@@ -502,8 +502,10 @@ import {
 } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
+
       newtypeone: {
         total: 0,
         form: {
@@ -693,6 +695,34 @@ export default {
           console.error(error);
         });
     },
+    //新闻上线
+    StatusOne(row) {
+      newsstatus(row.id)
+        .then((res) => {
+          const message = res.msg;
+          this.$notify({
+            title: "成功",
+            message: message,
+            type: "success",
+          });
+          this.newtypeone.tablist = [];
+          getnews(this.newtypeone.form)
+            .then((res) => {
+              this.newtypeone.total = Number(res.data.total);
+              const list = res.data.records;
+              const length = list.length;
+              for (var i = 0; i < length; i++) {
+                this.newtypeone.tablist.push(list[i]);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
     unitStatus(row) {
       unitstatus(row.id)
         .then((res) => {
@@ -747,6 +777,11 @@ export default {
     },
     //资讯删除
     opendelateNew(row) {
+      this.deletid = row.id;
+      this.delectlog = true;
+    },
+    //资讯删除
+    opendelateNewOne(row) {
       this.deletid = row.id;
       this.delectlog = true;
     },

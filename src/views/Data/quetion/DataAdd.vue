@@ -79,6 +79,7 @@
               <el-cascader
                 v-model="businessSupervisoryDeptId"
                 :options="deptList"
+                show-checkbox
                 :props="prop"
                 @change="deptIdchange"
                 placeholder="部门"
@@ -289,7 +290,6 @@
           <div class="fromitem">
             <el-form-item label="附件：">
               <el-upload
-               
                 :http-request="handleimgup"
                 multiple
                 list-type="picture-card"
@@ -374,11 +374,13 @@ export default {
         children: "children",
         value: "id",
         multiple: true,
+        checkStrictly: true,
       },
       prop: {
         label: "name",
         children: "children",
         value: "id",
+        checkStrictly: true,
       },
       auditTimeFrame: "",
       businessSupervisoryDeptId: "",
@@ -452,6 +454,9 @@ export default {
         });
       getAlldept()
         .then((res) => {
+          // for (let item of res.data[0].children) {
+          //   delete item.children;
+          // }
           this.deptList.push(res.data[0]);
         })
         .catch((error) => {

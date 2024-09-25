@@ -64,14 +64,14 @@
                 },
               ]"
             >
-              <el-select v-model="formList.twonValue">
-                <el-option
+              <el-input v-model="formList.address">
+                <!-- <el-option
                   v-for="item in formList.townParams"
                   :key="item.townName"
                   :label="item.townName"
                   :value="item.id"
-                ></el-option>
-              </el-select>
+                ></el-option> -->
+              </el-input>
             </el-form-item>
             <el-form-item
               label="小区名称："
@@ -193,9 +193,9 @@
               <el-select v-model="formList.houseValue">
                 <el-option
                   v-for="item in formList.houseStyle"
-                  :key="item.style"
-                  :label="item.style"
-                  :value="item.value"
+                  :key="item.dictValue"
+                  :label="item.dictLabel"
+                  :value="item.dictValue"
                 ></el-option> </el-select
             ></el-form-item>
           </div>
@@ -421,6 +421,7 @@
                 :on-preview="handlePictureCardPreview"
                 :on-remove="handleRemove"
                 :http-request="handleimgup"
+                :on-change="handimgChange"
               >
                 <i class="el-icon-plus"></i>
               </el-upload>
@@ -469,6 +470,7 @@
 import http from "@/utils/request";
 import { getMaplist } from "@/api/map";
 import { addHouse } from "@/api/house/post";
+import { getdict } from "@/api/dict/getdict";
 export default {
   data() {
     return {
@@ -477,24 +479,7 @@ export default {
         areaList: [],
         countyParams: [],
         townParams: [],
-        houseStyle: [
-          {
-            style: "集体用房",
-            value: "1",
-          },
-          {
-            style: "干部交流用房",
-            value: "2",
-          },
-          {
-            style: "临时周转用房",
-            value: "3",
-          },
-          {
-            style: "集中工人用房",
-            value: "4",
-          },
-        ],
+        houseStyle: [],
         roomNum: [
           { num: "1" },
           { num: "2" },
@@ -565,9 +550,30 @@ export default {
           this.formList.areaList.push(list[i]);
         }
       });
+      getdict("property_nature").then((res) => {
+        const list = res.data.records;
+        const length = list.length;
+        for (var i = 0; i < length; i++) {
+          this.formList.houseStyle.push(list[i]);
+        }
+      });
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      console.log(file, fileList, this.formList.img.indexOf(file.name));
+      if (this.formList.img.indexOf(file.name) != -1) {
+        let list = this.formList.img.split(",");
+        let i;
+        list.filter((item) => item.indexOf(file.name) != -1);
+        list.map((item, index) => {
+          console.log(item, index);
+          if (item.indexOf(file.name) != -1) {
+            i = index;
+          }
+        });
+        list.splice(i, 1);
+        this.formList.img = list.join(",");
+        console.log(i, list, this.formList.img, "1111");
+      }
     },
     handlePictureCardPreview(file) {
       this.formList.dialogImageUrl = file.url;
@@ -634,6 +640,11 @@ export default {
           console.error(error);
         });
     },
+    //
+    handimgChange(file, filelist) {
+      console.log(file, filelist);
+    },
+
     open(forName) {
       this.$refs[forName].validate((vaild) => {
         if (vaild) {

@@ -244,3 +244,16 @@ export function getModle(url) {
     // console.log(herf)
     window.location.href = herf
 }
+//guidang
+export function getEndModle(id, url) {
+    return http(
+        {
+            method: "get",
+            url: url,
+            params: {
+                id: id
+            },
+            // responseType:Blob
+        }
+    )
+}

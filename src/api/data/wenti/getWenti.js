@@ -61,7 +61,7 @@ export function problemEdit(form) {
             projectTypeCode: data.projectTypeCode,
             projectLevelCode: data.projectLevelCode,
             auditCustoms: data.auditCustoms,
-            businessSupervisoryDeptId: data.businessSupervisoryDept ? data.businessSupervisoryDept.id : null,
+            businessSupervisoryDeptId: data.businessSupervisoryDept ? data.businessSupervisoryDept.id : data.businessSupervisoryDeptId,
             responsibleDeptList: data.responsibleDeptList,
             auditLeader: data.auditLeader,
             auditAnnual: data.auditAnnual,

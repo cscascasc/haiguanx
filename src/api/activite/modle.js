@@ -85,13 +85,13 @@ export function getFlow(form) {
     )
 }
 //获取预设节点
-export function getTaskNote(id, custom) {
+export function getTaskNote(form) {
     return http({
         method: "get",
         url: '/process/getTaskNode',
         params: {
-            customsType: custom,
-            id: id
+            customsType: form.custom,
+            id: form.id
         }
     })
 }

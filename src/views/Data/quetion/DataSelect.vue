@@ -103,7 +103,7 @@
           <div class="pagination" v-if="problemtotal">
             <el-pagination
               background
-              layout="prev, pager, next"
+              layout="total,prev, pager, next"
               :total="problemtotal"
               @prev-click="changepage"
               @next-click="changepage"
@@ -211,7 +211,7 @@
           <div class="pagination" v-if="inareatotal">
             <el-pagination
               background
-              layout="prev, pager, next"
+              layout="total,prev, pager, next"
               :total="inareatotal"
               @prev-click="changeinareapage"
               @next-click="changeinareapage"
@@ -311,7 +311,7 @@
           <div class="pagination" v-if="ruletotal">
             <el-pagination
               background
-              layout="prev, pager, next"
+              layout="total,prev, pager, next"
               :total="ruletotal"
               :page-size="ruleform.size"
               @prev-click="changerulepage"
@@ -332,6 +332,7 @@ import { getinarea, getinareacount } from "@/api/data/neikong/getneikong";
 import { getdept, getdeptcustoms } from "@/api/dept/getdept";
 import { getrule, getrulecount } from "@/api/data/rule/getrule";
 export default {
+  name: "orderlist",
   data() {
     return {
       devmentValue: "",
@@ -709,7 +710,7 @@ export default {
     width: 100%;
     height: 600px;
     overflow-y: scroll;
-    overflow-x:hidden ;
+    overflow-x: hidden;
     .table {
       width: 70vw;
       padding-left: 20px;

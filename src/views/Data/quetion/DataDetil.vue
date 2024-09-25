@@ -123,8 +123,12 @@
                     ? probelemdetilelist.businessSupervisoryDept.name
                     : '暂无数据'
                 "
-                @change="savelast"
                 :disabled="type === 'rect'"
+                @change="
+                  (e) => {
+                    probelemdetilelist.businessSupervisoryDeptId = e;
+                  }
+                "
               >
               </el-cascader>
             </el-form-item>
@@ -162,9 +166,15 @@
                 type="daterange"
                 format="yyyy"
                 value-format="yyyy"
+                :placeholder="probelemdetilelist.auditTimeFrame"
                 start-placeholder="开始日期"
                 end-placeholder="结束日期"
                 :disabled="type === 'rect'"
+                @change="
+                  (e) => {
+                    probelemdetilelist.auditTimeFrame = e[0] + '-' + e[1];
+                  }
+                "
               ></el-date-picker>
             </el-form-item>
           </div>
@@ -481,6 +491,31 @@
       </span>
     </el-dialog>
     <el-dialog title="弱关联内控节点" width="75%" :visible.sync="inerarlog">
+      <div
+        :style="{
+          display: 'flex',
+        }"
+      >
+        <el-form size="small" inline>
+          <el-form-item label="节点名称">
+            <el-input v-model="inerarform.keywords" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="节点级别">
+            <el-select v-model="inerarform.codeLevel" clearable>
+              <el-option
+                v-for="item in codoLevelList"
+                :key="item.dictValue"
+                :value="item.dictValue"
+                :label="item.dictLabel"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-button size="small" type="primary" @click="ineareSerch">
+            查询</el-button
+          >
+          <el-button size="small" @click="ineareReset">重置</el-button>
+        </el-form>
+      </div>
       <el-table :data="innaerlist" border max-height="400">
         <el-table-column
           label="节点序号"
@@ -523,7 +558,7 @@
       >
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :page-size="inerarform.size"
           :total="inaertotal"
           @prev-click="changeinearapage"
@@ -539,6 +574,21 @@
       :visible.sync="ruleslog"
       max-height="400"
     >
+      <div
+        :style="{
+          display: 'flex',
+        }"
+      >
+        <el-form size="small" inline>
+          <el-form-item label="节点名称">
+            <el-input v-model="inerarform.keywords" clearable></el-input>
+          </el-form-item>
+          <el-button size="small" type="primary" @click="ruleSerch">
+            查询</el-button
+          >
+          <el-button size="small" @click="ruleReset">重置</el-button>
+        </el-form>
+      </div>
       <el-table :data="rulelist" border>
         <el-table-column prop="title" label="规章制度标题" fixed="left">
         </el-table-column>
@@ -567,7 +617,7 @@
       >
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :page-size="rulearform.size"
           :total="ruletotal"
           @prev-click="changerulepage"
@@ -608,6 +658,7 @@ import {
   getobjectlevel,
   getbusinessAear,
   getbusinessType,
+  getdict,
 } from "@/api/dict/getdict";
 import { getdept, getAlldept, getdeptcustoms } from "@/api/dept/getdept";
 import http from "@/utils/request";
@@ -635,11 +686,13 @@ export default {
         children: "children",
         value: "id",
         multiple: true,
+        checkStrictly: true,
       },
       prop: {
         label: "name",
         children: "children",
         value: "id",
+        checkStrictly: true,
       },
       code: {
         businessAreaCode: null,
@@ -685,6 +738,7 @@ export default {
       reinerar: false,
       inaerid: "",
       url: [],
+      codoLevelList: [],
     };
   },
   created() {
@@ -761,6 +815,14 @@ export default {
       if (this.code.projectTypeCode !== null) {
         this.probelemdetilelist.projectTypeCode = this.code.projectTypeCode;
       }
+      if (this.code.businessSupervisoryDeptId !== null) {
+        this.probelemdetilelist.businessSupervisoryDeptId = this.code
+          .businessSupervisoryDeptId
+          ? this.code.businessSupervisoryDeptId.pop()
+          : null;
+      }
+      console.log(this.probelemdetilelist);
+      // return;
       problemEdit(this.probelemdetilelist)
         .then((res) => {
           const message = res.msg;
@@ -857,10 +919,16 @@ export default {
         });
     },
     savelast(node) {
+      console.log(node);
       var list = [];
-      node.forEach((node) => list.push(node.pop()));
+      node.forEach((node) => {
+        console.log(node);
+        if (typeof node == "array") {
+          list.push(node.pop());
+        }
+      });
       this.probelemdetilelist.responsibleDeptList = list;
-      console.log(this.probelemdetilelist.responsibleDeptList);
+      console.log(this.probelemdetilelist.responsibleDeptList, "1111");
     },
     changebusinessarea(value) {
       this.rulearform.businessAreaCode = value;
@@ -886,6 +954,7 @@ export default {
         .catch((error) => {
           console.error(error);
         });
+      this.getdictNode();
       this.inerarlog = true;
     },
     getrulelist() {
@@ -920,7 +989,7 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.getrulelist();
         })
         .catch((error) => {
           console.error(error);
@@ -939,7 +1008,7 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.getinarealist();
         })
         .catch((error) => {
           console.error(error);
@@ -954,7 +1023,7 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.getinarealist();
         })
         .catch((error) => {
           console.error(error);
@@ -969,7 +1038,7 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.getrulelist();
         })
         .catch((error) => {
           console.error(error);
@@ -1027,6 +1096,97 @@ export default {
       const index = row.lastIndexOf("/");
       const text = row.substr(index + 1);
       return text;
+    },
+    //获取节点级别
+    getdictNode() {
+      getdict("node_level").then((res) => {
+        this.codoLevelList = [];
+        const list = res.data.records;
+        const length = list.length;
+        for (var i = 0; i < length; i++) {
+          this.codoLevelList.push(list[i]);
+        }
+      });
+    },
+    //内控查詢
+    ineareSerch() {
+      this.innaerlist = [];
+      problemBaseinarea(this.inerarform)
+        .then((res) => {
+          this.inaertotal = Number(res.data.total);
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.innaerlist.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    //内控重置
+    ineareReset() {
+      this.inerarform = {
+        businessSubcategoriesCode:
+          this.probelemdetilelist.businessSubcategoriesCode,
+        size: 10,
+        current: 1,
+        id: this.id,
+      };
+      this.innaerlist = [];
+      problemBaseinarea(this.inerarform)
+        .then((res) => {
+          this.inaertotal = Number(res.data.total);
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.innaerlist.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    //问题查询
+    ruleSerch() {
+      this.rulelist = [];
+      problemBaseRule(this.rulearform)
+        .then((res) => {
+          this.ruletotal = Number(res.data.total);
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.rulelist.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    //问题重置
+    ruleReset() {
+      this.rulearform = {
+        businessAreaCode: null,
+        size: 10,
+        current: 1,
+        id: "",
+      };
+      this.rulearform.businessAreaCode =
+        this.probelemdetilelist.businessAreaCode;
+      this.rulearform.id = this.id;
+      this.rulelist = [];
+      problemBaseRule(this.rulearform)
+        .then((res) => {
+          this.ruletotal = Number(res.data.total);
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.rulelist.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   },
 

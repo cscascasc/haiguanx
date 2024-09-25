@@ -300,7 +300,7 @@
       <div class="pagination">
         <el-pagination
           background
-          layout="prev, pager, next"
+          layout="total,prev, pager, next"
           :total="total"
           :page-size="form.size"
           @prev-click="changepage"
@@ -349,6 +349,7 @@ import {
 } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       form: {
@@ -493,7 +494,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.tabledata = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
@@ -512,7 +514,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.tabledata = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);
@@ -578,7 +581,8 @@ export default {
             message: res.msg,
             type: "success",
           });
-          this.$router.go();
+          this.tabledata = [];
+          this.gettabledata();
         })
         .catch((error) => {
           console.error(error);

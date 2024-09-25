@@ -137,7 +137,7 @@
             <div class="pagination">
               <el-pagination
                 background
-                layout="prev, pager, next"
+                layout="total,prev, pager, next"
                 :total="total"
                 :page-size="res.size"
                 @prev-click="change"
@@ -277,7 +277,7 @@
             <div class="pagination">
               <el-pagination
                 background
-                layout="prev, pager, next"
+                layout="total,prev, pager, next"
                 :total="waittotal"
                 :page-size="statuswaitfrom.size"
                 @prev-click="waitChange"
@@ -290,9 +290,9 @@
         </el-tab-pane>
         <el-tab-pane name="9" class="tabone" label="复审">
           <div class="top">
-            <el-form v-model="statuswaitfrom" inline>
+            <el-form v-model="reProcure" inline>
               <el-form-item label="采购类型">
-                <el-select v-model="statuswaitfrom.procureType" clearable>
+                <el-select v-model="reProcure.procureType" clearable>
                   <el-option
                     v-for="item in procureType"
                     :key="item.dictLabel"
@@ -304,7 +304,7 @@
                 >
               </el-form-item>
               <el-form-item label="采购类别">
-                <el-select v-model="statuswaitfrom.procureCategory" clearable>
+                <el-select v-model="reProcure.procureCategory" clearable>
                   <el-option
                     v-for="item in procureCategory"
                     :key="item.dictLabel"
@@ -318,10 +318,10 @@
             </el-form>
             <div class="seach">
               <el-input
-                v-model="statuswaitfrom.name"
+                v-model="reProcure.name"
                 placeholder="请输入搜索内容"
               ></el-input>
-              <el-button type="primary" @click="seachwait">搜索</el-button>
+              <el-button type="primary" @click="seachreProcure">搜索</el-button>
               <el-button type="warning" @click="refesh">重置</el-button>
             </div>
           </div>
@@ -373,7 +373,10 @@
                 prop="budgetAmount"
                 label="采购金额"
               ></el-table-column>
-              <el-table-column label="付款方式" prop="paymentType">
+              <el-table-column
+                label="付款方式"
+                prop="paymentType"
+              ></el-table-column>
               <el-table-column
                 prop="contractNum"
                 label="合同编号"
@@ -414,7 +417,72 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="1" class="tabone" label="已结束">
-          <div class="top"></div>
+          <div class="top">
+            <el-form size="small" inline>
+              <el-form-item>
+                <el-date-picker
+                  v-model="endData.createYear"
+                  placeholder="请选择审批结束时间"
+                  type="year"
+                  value-format="yyyy"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item>
+                <el-select
+                  v-model="endData.status"
+                  clearable
+                  style="margin-left: 10px"
+                >
+                  <el-option
+                    v-for="item in stats"
+                    :key="item.value"
+                    :label="item.lable"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-select
+                  v-model="endData.procureType"
+                  clearable
+                  placeholder="采购类型"
+                >
+                  <el-option
+                    v-for="item in procureType"
+                    :key="item.dictLabel"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                  >
+                  </el-option
+                ></el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-select
+                  v-model="endData.procureCategory"
+                  clearable
+                  placeholder="采购类别"
+                >
+                  <el-option
+                    v-for="item in procureCategory"
+                    :key="item.dictLabel"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                  >
+                    {{ item.dictLabel }}
+                  </el-option></el-select
+                >
+              </el-form-item>
+              <el-form-item>
+                <el-button @click="endSearch" type="primary">搜索</el-button>
+                <el-button @click="endReset" style="margin-left: 10px"
+                  >重置</el-button
+                ></el-form-item
+              >
+            </el-form>
+            <!-- <div></div>
+            <div></div> -->
+          </div>
           <div class="table" v-if="tablistover.length === 0">
             <el-table border>
               <el-table-column
@@ -438,15 +506,6 @@
             </el-table>
           </div>
           <div class="table" v-if="tablistover.length !== 0">
-            <div class="pagination">
-              <!-- <el-pagination
-                background
-                layout="prev, pager, next"
-                :total="total"
-                :page-size="size"
-              >
-              </el-pagination> -->
-            </div>
             <el-table :data="tablistover" border>
               <el-table-column
                 prop="name"
@@ -472,7 +531,10 @@
                 prop="budgetAmount"
                 label="采购金额"
               ></el-table-column>
-              <el-table-column label="付款方式" prop="paymentType">
+              <el-table-column
+                label="付款方式"
+                prop="paymentType"
+              ></el-table-column>
               <el-table-column
                 prop="contractNum"
                 label="合同编号"
@@ -509,6 +571,18 @@
                   >
                   <el-button
                     type="text"
+                    @click="deleted(scope.row)"
+                    :disabled="isDesiable('procure:remove:remove')"
+                    >删除</el-button
+                  >
+                  <el-button
+                    type="text"
+                    @click="guidang(scope.row)"
+                    v-if="scope.row.status == 3"
+                    >归档</el-button
+                  >
+                  <el-button
+                    type="text"
                     v-if="scope.row.status === 2"
                     @click="report(scope.row)"
                     >重新提交</el-button
@@ -518,9 +592,9 @@
             </el-table>
           </div>
         </el-tab-pane>
-        <el-tab-pane class="tabone" label="我发起的">
+        <el-tab-pane name="2" class="tabone" label="我发起的">
           <div class="top">
-            <el-form v-model="form" inline>
+            <el-form size="small" v-model="form" inline>
               <el-form-item label="采购类型">
                 <el-select v-model="myres.procureType">
                   <el-option
@@ -545,15 +619,20 @@
                   </el-option></el-select
                 >
               </el-form-item>
+              <el-form-item>
+                <el-input
+                  v-model="myres.name"
+                  placeholder="请输入名称"
+                ></el-input
+              ></el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="myserch">搜索</el-button>
+                <el-button type="warning" @click="refesh"
+                  >重置</el-button
+                ></el-form-item
+              >
             </el-form>
-            <div class="seach">
-              <el-input
-                v-model="myres.name"
-                placeholder="请输入名称"
-              ></el-input>
-              <el-button type="primary" @click="myserch">搜索</el-button>
-              <el-button type="warning" @click="refesh">重置</el-button>
-            </div>
+            <!-- <div class="seach"></div> -->
           </div>
           <div class="table">
             <el-table :data="mytablelist" border>
@@ -635,12 +714,152 @@
             <div class="pagination">
               <el-pagination
                 background
-                layout="prev, pager, next"
+                layout="total,prev, pager, next"
                 :total="mytotal"
                 :page-size="myres.size"
                 @prev-click="changemy"
                 @next-click="changemy"
                 @current-change="changemy"
+              >
+              </el-pagination>
+            </div>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane name="3" class="tabone" label="我审核的">
+          <div class="top">
+            <el-form size="small" v-model="form" inline>
+              <el-form-item label="采购类型">
+                <el-select v-model="myaduit.procureType">
+                  <el-option
+                    v-for="item in procureType"
+                    :key="item.dictLabel"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                  >
+                    {{ item.dictLabel }}
+                  </el-option></el-select
+                >
+              </el-form-item>
+              <el-form-item label="采购类别">
+                <el-select v-model="myaduit.procureCategory">
+                  <el-option
+                    v-for="item in procureCategory"
+                    :key="item.dictLabel"
+                    :label="item.dictLabel"
+                    :value="item.dictValue"
+                  >
+                    {{ item.dictLabel }}
+                  </el-option></el-select
+                >
+              </el-form-item>
+              <el-form-item>
+                <el-input
+                  v-model="myaduit.name"
+                  placeholder="请输入名称"
+                ></el-input
+              ></el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="myexamineserch"
+                  >搜索</el-button
+                >
+                <el-button type="warning" @click="myexaminerefesh"
+                  >重置</el-button
+                ></el-form-item
+              >
+            </el-form>
+          </div>
+          <div class="table">
+            <el-table :data="myexaminelist" border>
+              <el-table-column
+                prop="name"
+                label="采购项目名称"
+                fixed="left"
+              ></el-table-column>
+              <el-table-column prop="procureType" label="采购类型">
+                <div slot-scope="scope">
+                  {{ procureType[scope.row.procureType].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column label="采购类别">
+                <div slot-scope="scope">
+                  {{ procureCategory[scope.row.procureCategory].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column label="采购方式">
+                <div slot-scope="scope">
+                  {{ procureWay[scope.row.procureWay].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column
+                prop="budgetAmount"
+                label="采购金额"
+              ></el-table-column>
+              <el-table-column label="付款方式">
+                <div>
+                  {{ paymentType[0].dictLabel }}
+                </div>
+              </el-table-column>
+              <el-table-column
+                prop="contractNum"
+                label="合同编号"
+              ></el-table-column>
+              <el-table-column prop="dept.name" label="需求部门">
+              </el-table-column>
+              <el-table-column
+                prop="paymentType"
+                label="联系人"
+              ></el-table-column>
+              <el-table-column
+                prop="contacts"
+                label="联系人电话"
+              ></el-table-column>
+              <el-table-column label="状态">
+                <div slot-scope="scope">
+                  <el-button
+                    :type="stats[scope.row.status].type"
+                    size="small"
+                    disabled
+                  >
+                    {{ stats[scope.row.status].lable }}
+                  </el-button>
+                </div>
+              </el-table-column>
+              <el-table-column
+                prop="createTime"
+                label="提交时间"
+              ></el-table-column>
+              <el-table-column label="操作" fixed="right" width="150px">
+                <div slot-scope="scope">
+                  <el-button type="text" @click="procureditile(scope.row)"
+                    >详情</el-button
+                  >
+                  <el-button type="text" @click="opneNode(scope.row)"
+                    >查看流程</el-button
+                  >
+                  <el-button
+                    type="text"
+                    @click="guidang(scope.row)"
+                    v-if="scope.row.status == 3"
+                    >归档</el-button
+                  >
+                  <el-button
+                    type="text"
+                    v-if="scope.row.status === 2"
+                    @click="report(scope.row)"
+                    >重新提交</el-button
+                  >
+                </div>
+              </el-table-column>
+            </el-table>
+            <div class="pagination">
+              <el-pagination
+                background
+                layout="total,prev, pager, next"
+                :total="myaduitTotal"
+                :page-size="myaduit.size"
+                @prev-click="changemyaduit"
+                @next-click="changemyaduit"
+                @current-change="changemyaduit"
               >
               </el-pagination>
             </div>
@@ -931,11 +1150,13 @@
                     textOverflow: 'ellipsis',
                   }"
                 >
-                  {{
-                    subitem.userName
-                      ? subitem.userName + `(${item.deptList[0].splitDept})`
-                      : "审核人"
-                  }}
+                  <span :title="`${subitem.userName}(${subitem.userDept})`">
+                    {{
+                      subitem.userName
+                        ? subitem.userName + "(" + subitem.userDept + ")"
+                        : "审核人"
+                    }}
+                  </span>
                 </div>
                 <div
                   class="option"
@@ -978,9 +1199,11 @@
                   v-for="bitem in subitem.annexList"
                   :key="bitem"
                 >
-                  {{ "附件" + slice(bitem) }}
+                  <el-button type="text" size="mini" @click="down(bitem)">{{
+                    "附件" + slice(bitem)
+                  }}</el-button>
                 </div>
-                <div
+                <!-- <div
                   class="time"
                   v-if="subitem.annex"
                   :style="{
@@ -990,9 +1213,10 @@
                     whiteSpace: 'nowrap',
                     textOverflow: 'ellipsis',
                   }"
+                  @click="download(subitem.annex)"
                 >
                   {{ "附件:" + slice(subitem.annex) }}
-                </div>
+                </div> -->
                 <div
                   class="time"
                   :style="{
@@ -1000,6 +1224,38 @@
                   }"
                 >
                   {{ subitem.createTime }}
+                </div>
+              </el-button>
+            </div>
+          </div>
+          <div
+            :style="{
+              width: '90%',
+            }"
+            v-if="item.currentNodeUserMap && nodelog"
+          >
+            <div
+              class="nodeboxchildren"
+              v-for="subitem in item.currentNodeUserMap"
+              :key="subitem.id"
+            >
+              <el-button type="primary">
+                <div
+                  class="title"
+                  :style="{
+                    fontSize: '16px',
+                    padding: '2px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }"
+                >
+                  <span :title="`${subitem.user}(${subitem.dept})`">
+                    {{
+                      subitem.user
+                        ? subitem.user + "(" + subitem.dept + ")"
+                        : "审核人"
+                    }}
+                  </span>
                 </div>
               </el-button>
             </div>
@@ -1018,7 +1274,7 @@
 </template>
 
 <script>
-import { getModle } from "@/api/download/download";
+import { getModle, getEndModle } from "@/api/download/download";
 import http from "@/utils/request";
 import {
   getprocureList,
@@ -1026,12 +1282,14 @@ import {
   getallprocure,
   exprocure,
   removeappor,
+  post,
 } from "@/api/procure/getprocure";
 import { getHistory, getHistoryNode } from "@/api/activite/modle";
 import { getdeptUser, getdept, getAlldept } from "@/api/dept/getdept";
 import { getdict } from "@/api/dict/getdict";
-
+import { Disablebutton } from "@/utils/button";
 export default {
+  name: "orderlist",
   data() {
     return {
       total: 0,
@@ -1048,22 +1306,27 @@ export default {
         {
           lable: "待审核",
           type: "warning",
+          value: 0,
         },
         {
-          lable: "代补充信息",
+          lable: "待补充信息",
           type: "primary",
+          value: 1,
         },
         {
           lable: "已驳回",
           type: "danger",
+          value: 2,
         },
         {
           lable: "已完成",
           type: "success",
+          value: 3,
         },
         {
           lable: "重新提交",
           type: "danger",
+          value: 4,
         },
       ],
       formlist: {
@@ -1119,8 +1382,18 @@ export default {
         name: null,
         applicantId: this.$store.state.userinfo.userID,
       },
+      myaduit: {
+        current: 1,
+        size: 10,
+        status: null,
+        procureType: null,
+        procureCategory: null,
+        name: null,
+        examineUser: this.$store.state.userinfo.userID,
+      },
       dictUser: [],
       all: [],
+      allList: [],
       detilelist: {},
       detileialog: false,
       tablelist: [],
@@ -1130,6 +1403,7 @@ export default {
       paymentType: [],
       customsType: [],
       mytablelist: [],
+      myexaminelist: [],
       mytotal: 0,
       statuswaitfrom: {
         current: 1,
@@ -1204,9 +1478,14 @@ export default {
         5: "danger",
       },
       retotal: 0,
+      myaduitTotal: 0,
       bidtype: [],
       projectCategory: [],
       procurementOrganization: [],
+      endData: {
+        createTime: "",
+        status: "",
+      },
     };
   },
   methods: {
@@ -1250,6 +1529,7 @@ export default {
       this.getall();
       this.getMy();
       this.getRe();
+      this.getMyExamine();
     },
     change(value) {
       this.res.current = value;
@@ -1291,6 +1571,7 @@ export default {
           for (var i = 0; i < length; i++) {
             this.all.push(list[i]);
           }
+          this.allList = this.all;
         })
         .catch((error) => {
           console.error(error);
@@ -1298,6 +1579,21 @@ export default {
     },
     //获取复审
     getRe() {
+      getallprocure(this.reProcure)
+        .then((res) => {
+          this.retotal = Number(res.data.total);
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.reProcureList.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    seachreProcure() {
+      this.reProcureList = [];
       getallprocure(this.reProcure)
         .then((res) => {
           this.retotal = Number(res.data.total);
@@ -1320,6 +1616,21 @@ export default {
           const length = list.length;
           for (var i = 0; i < length; i++) {
             this.mytablelist.push(list[i]);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    //获取我我审核的
+    getMyExamine() {
+      getallprocure(this.myaduit)
+        .then((res) => {
+          this.myaduitTotal = Number(res.data.total);
+          const list = res.data.records;
+          const length = list.length;
+          for (var i = 0; i < length; i++) {
+            this.myexaminelist.push(list[i]);
           }
         })
         .catch((error) => {
@@ -1610,6 +1921,7 @@ export default {
       console.log(this.urllist);
     },
     down(row) {
+      console.log(row);
       getModle(row.name || row);
     },
     report(row) {
@@ -1646,7 +1958,15 @@ export default {
                 message: res.msg,
                 type: "success",
               });
-              this.$router.go();
+              this.detileialog = false;
+              this.all = [];
+              this.tablelist = [];
+              this.tablistwait = [];
+              this.tablistover = [];
+              this.reProcureList = [];
+              this.mytablelist = [];
+              this.myexaminelist = [];
+              this.getlist();
             })
             .catch((error) => {
               console.error(error);
@@ -1694,16 +2014,110 @@ export default {
           console.error(error);
         });
     },
+    async download(row) {
+      let a = row.split(",");
+      console.log(a);
+      for (let item of a) {
+        console.log(item);
+        await getModle(item);
+      }
+    },
+    endSearch() {
+      let parma = {
+        ...this.endData,
+        size: this.total,
+        current: 1,
+      };
+      console.log(parma);
+      getallprocure(parma).then((res) => {
+        console.log(res);
+        this.allList = res.data.records;
+      });
+    },
+    endReset() {
+      this.allList = this.all;
+    },
+    guidang(row) {
+      getEndModle(row.id, "/procure/examineRecord").then((res) => {
+        console.log(res);
+        window.location.href = res.data;
+      });
+    },
+    changemyaduit(value) {
+      this.myaduit.current = value;
+      this.myexaminelist = [];
+      this.getMyExamine();
+    },
+    myexamineserch() {
+      this.myexaminelist = [];
+      this.getMyExamine();
+    },
+    myexaminerefesh() {
+      this.myaduit = {
+        current: 1,
+        size: 10,
+        status: null,
+        procureType: null,
+        procureCategory: null,
+        name: null,
+        examineId: this.$store.state.userinfo.userID,
+      };
+      this.myexaminelist = [];
+      this.getMyExamine();
+    },
+    deleted(row) {
+      this.$confirm("请确认是否删除", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+      })
+        .then(() => {
+          post("/procure/remove", row.id)
+            .then((res) => {
+              this.$message({
+                title: "成功",
+                message: "删除成功",
+                type: "success",
+              });
+              this.all = [];
+              this.tablelist = [];
+              this.tablistwait = [];
+              this.tablistover = [];
+              this.reProcureList = [];
+              this.mytablelist = [];
+              this.myexaminelist = [];
+              this.getlist();
+            })
+            .catch((error) => {});
+        })
+        .catch(() => {
+          return false;
+        });
+    },
+    isDesiable(type) {
+      return Disablebutton(type);
+    },
   },
   created() {
     this.getdictlist();
   },
   computed: {
     tablistover() {
-      return this.all.filter((item) => item.status !== 0);
+      return this.allList.filter((item) => item.status !== 0);
     },
   },
-  mounted() {
+  // mounted() {
+  //   this.getlist();
+  //   // this.getdictuserlist();
+  //   this.getdetlist();
+  // },
+  activated() {
+    this.all = [];
+    this.tablelist = [];
+    this.tablistwait = [];
+    this.tablistover = [];
+    this.reProcureList = [];
+    this.mytablelist = [];
+    this.myexaminelist = [];
     this.getlist();
     // this.getdictuserlist();
     this.getdetlist();

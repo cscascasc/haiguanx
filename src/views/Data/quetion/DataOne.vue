@@ -58,12 +58,13 @@
             ></el-option
           ></el-select>
           <el-cascader
-            v-model="form.responsibleDeptList"
+            v-model="form.responsibleDept"
             :options="dept"
             :props="props"
             placeholder="责任部门"
             clearable
             filterable
+            @change="(e) => deptIdchange(e, 'responsibleDept')"
           ></el-cascader>
         </div>
         <div class="upadd">
@@ -135,6 +136,16 @@
           <el-option label="是" :value="0"> </el-option>
           <el-option label="否" :value="1"> </el-option>
         </el-select>
+        <el-cascader
+          v-model="form.businessSupervisoryDeptId"
+          :options="dept"
+          :props="props"
+          @change="(e) => deptIdchange(e, 'businessSupervisoryDeptId')"
+          placeholder="业务主管部门"
+          clearable
+          filterable
+        >
+        </el-cascader>
         <el-button icon="el-icon-search" @click="saerch">搜索</el-button>
         <el-button icon="el-icon-refresh" @click="refesh">重置</el-button>
       </div>
@@ -189,6 +200,11 @@
           </div>
         </el-table-column>
         <el-table-column
+          prop="auditTimeFrame"
+          label="审计时间范围"
+          align="center"
+        ></el-table-column>
+        <el-table-column
           prop="responsibleDeptList"
           label="整改责任部门"
           align="center"
@@ -215,8 +231,9 @@
             </el-button>
           </div>
         </el-table-column>
+
         <el-table-column
-          prop="auditTimeFrame"
+          prop="rectificationDeadline"
           label="整改期限"
           align="center"
         ></el-table-column>
@@ -288,7 +305,7 @@
               size="small"
               :disabled="Disable('data:data:status')"
               :type="scope.row.isCancel !== 0 ? 'success' : 'warning'"
-              >{{ scope.row.isCancel !== 0 ? "生效" : "待生效" }}</el-button
+              >{{ scope.row.isCancel !== 0 ? "待生效" : "生效" }}</el-button
             >
             <el-button
               size="small"
@@ -389,8 +406,8 @@ import {
   getModle,
 } from "@/api/download/download";
 import { Disablebutton } from "@/utils/button";
-
 export default {
+  name: "orderlist",
   data() {
     return {
       status: [
@@ -413,7 +430,7 @@ export default {
       props: {
         label: "name",
         children: "children",
-        value: "allPath",
+        value: "id",
       },
       judge: 1,
       judgeid: "",
@@ -424,7 +441,7 @@ export default {
         size: 10,
         current: "1",
         keywords: null,
-        responsibleDeptList: null,
+        responsibleDept: null,
         auditCustomsIds: null,
         isExamine: null,
         businessAreaCode: null,
@@ -434,6 +451,7 @@ export default {
         projectLevelCode: null,
         projectTypeCode: null,
       },
+      beasForm: {},
       delateid: "",
       total: "",
       dept: [],
@@ -523,7 +541,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.problemlist = [];
+          this.getproblemlist();
         })
         .catch((error) => {
           console.error(error);
@@ -584,7 +603,8 @@ export default {
             message: message,
             type: "success",
           });
-          this.$router.go();
+          this.problemlist = [];
+          this.getproblemlist();
         })
         .catch((error) => {
           console.error(error);
@@ -677,7 +697,8 @@ export default {
             message: res.msg,
             type: "success",
           });
-          this.$router.go();
+          this.problemlist = [];
+          this.getproblemlist();
         })
         .catch((error) => {
           console.error(error);
@@ -731,7 +752,22 @@ export default {
       return Disablebutton(data);
     },
     refesh() {
-      this.$router.go();
+      this.form = {
+        size: 10,
+        current: "1",
+        keywords: null,
+        responsibleDeptList: null,
+        auditCustomsIds: null,
+        isExamine: null,
+        businessAreaCode: null,
+        businessSubcategoriesCode: null,
+        internalStatus: null,
+        rulesStatus: null,
+        projectLevelCode: null,
+        projectTypeCode: null,
+      };
+      this.problemlist = [];
+      this.getproblemlist();
     },
     opendelate(row) {
       (this.delateid = row.id), (this.delatelog = true);
@@ -776,8 +812,19 @@ export default {
       this.problemlist = [];
       this.getproblemlist();
     },
+    deptIdchange(value, name) {
+      const list = value;
+      console.log(value);
+      const length = list.length;
+      console.log(length);
+      this.form[name] = list[length - 1];
+      // this.data.businessSupervisoryDeptId = list[length - 1];
+      // console.log(this.data.businessSupervisoryDeptId);
+    },
   },
-
+  created() {
+    this.beasForm = this.form;
+  },
   mounted() {
     this.getproblemlist();
     this.getoption();

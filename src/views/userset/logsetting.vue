@@ -70,7 +70,7 @@
       </el-table>
       <div class="pagination">
         <el-pagination
-          background    
+          background
           layout="total,sizes,prev, pager, next"
           :total="total"
           :page-size="size.size"
@@ -91,6 +91,7 @@ import { getAlldept, findDeptUser } from "@/api/dept/getdept";
 import { getlog } from "@/api/log";
 import { getalldata } from "@/api/echarts/getechartsdata";
 export default {
+  name: "orderlist",
   data() {
     return {
       form: {
