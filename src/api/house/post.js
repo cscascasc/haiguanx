@@ -1,38 +1,37 @@
 import http from "@/utils/request";
 //新增房间
 export function addHouse(
-  roomNumber, houseEstate, propertyNature,
-  cityCode, regionCode, communityCode, unit,
-  allArea, actualArea, shareArea, bedroomNumm,
-  parlorNum, toiletNum, propertyOwner, certificateTitle,
-  noties, roomNum, waterMeter, electricMeter, broadbandMeter,
-  rentCycleCode, rentUnitPrice, houseImages,
-  roomState) {
+  data) {
   const list = {
-    RoomNumber: roomNumber,//房间号
-    HouseEstate: houseEstate, //小区
-    PropertyNature: propertyNature, // 房间属性
-    CityCode: cityCode,// 县市
-    RegionCode: regionCode, //区县
-    CommunityCode: communityCode, //街道
-    Unit: unit,//楼栋
-    AllArea: allArea, // 房屋面积
-    ActualArea: actualArea, // 实际使用面积
-    ShareArea: shareArea,//公摊使用面积
-    BedroomNumm: bedroomNumm,//卧室数
-    ParlorNum: parlorNum,//客厅数
-    ToiletNum: toiletNum,//厕所数
-    PropertyOwner: propertyOwner, //产权人
-    CertificateTitle: certificateTitle,//房产证
-    Noties: noties,//备注
-    RoomNum: roomNum, //卧室数
-    WaterMeter: waterMeter, //水表号
-    ElectricMeter: electricMeter,//电表号
-    BroadbandMeter: broadbandMeter,//宽带号
-    RentCycleCode: rentCycleCode, //租金周期
-    RentUnitPrice: rentUnitPrice, //租金
-    HouseImages: houseImages,//房屋图片
-    roomAreas: roomState, //卧室面积
+    RoomNumber: data.roomNumber,//房间号
+    HouseEstate: data.houseEstate, //小区
+    PropertyNature: data.propertyNature, // 房间属性
+    CityCode: data.cityCode,// 县市
+    RegionCode: data.regionCode, //区县
+    CommunityCode: data.communityCode, //街道
+    Unit: data.unit,//楼栋
+    AllArea: data.allArea, // 房屋面积
+    ActualArea: data.actualArea, // 实际使用面积
+    ShareArea: data.shareArea,//公摊使用面积
+    BedroomNumm: data.bedroomNumm,//卧室数
+    ParlorNum: data.parlorNum,//客厅数
+    ToiletNum: data.toiletNum,//厕所数
+    PropertyOwner: data.propertyOwner, //产权人
+    CertificateTitle: data.certificateTitle,//房产证
+    Noties: data.noties,//备注
+    RoomNum: data.roomNum, //卧室数
+    WaterMeter: data.waterMeter, //水表号
+    ElectricMeter: data.electricMeter,//电表号
+    BroadbandMeter: data.broadbandMeter,//宽带号
+    RentCycleCode: data.rentCycleCode, //租金周期
+    RentUnitPrice: data.rentUnitPrice, //租金
+    HouseImages: data.houseImages,//房屋图片
+    roomAreas: data.roomState, //卧室面积
+    gasMeter: data.gasMeter, //房屋图片
+    cableTVMeter: data.cableTVMeter, //房屋图片
+    propertyPhone: data.propertyPhone, //房屋图片
+    manageDeptPhone: data.manageDeptPhone, //房屋图片
+    intelligentDeptPhone: data.intelligentDeptPhone, //房屋图片
   }
   console.log(list, '1')
   return http({
@@ -64,7 +63,12 @@ export function addHouse(
         "rentUnitPrice": list.RentUnitPrice,
         "houseImages": list.HouseImages
       },
-      "roomAreas": list.roomAreas
+      "roomAreas": list.roomAreas,
+      gasMeter: list.gasMeter, //房屋图片
+      cableTVMeter: list.cableTVMeter, //房屋图片
+      propertyPhone: list.propertyPhone, //房屋图片
+      manageDeptPhone: list.manageDeptPhone, //房屋图片
+      intelligentDeptPhone: list.intelligentDeptPhone, //房屋图片
     }
   })
 }
@@ -73,50 +77,55 @@ export function editHouse(
   form
 ) {
   console.log(form)
+  let data = {
+    id: form.id,
+    createTime: form.createTime,
+    updateTime: form.updateTime,
+    isDeleted: form.isDeleted,
+    status: form.status,
+    roomNumber: form.roomNumber,
+    houseEstate: form.houseEstate,
+    propertyNatureCode: form.propertyNatureCode,
+    cityCode: form.cityCode,
+    regionCode: form.regionCode,
+    unit: form.unit,
+    communityCode: form.communityCode,
+    allArea: form.allArea,
+    actualArea: form.actualArea,
+    shareArea: form.shareArea,
+    bedroomNum: form.bedroomNum,
+    parlorNum: form.parlorNum,
+    toiletNum: form.toiletNum,
+    propertyOwner: form.propertyOwner,
+    certificateTitle: form.certificateTitle,
+    houseDetails: {
+      id: form.houseDetails.id,
+      createTime: form.houseDetails.createTime,
+      updateTime: form.houseDetails.updateTime,
+      isDeleted: form.houseDetails.isDeleted,
+      status: form.houseDetails.status,
+      houseId: form.houseDetails.houseId,
+      roomNum: form.houseDetails.roomNum,
+      roomAreas: form.houseDetails.roomAreas,
+      waterMeter: form.houseDetails.waterMeter,
+      electricMeter: form.houseDetails.electricMeter,
+      broadbandMeter: form.houseDetails.broadbandMeter,
+      rentCycleCode: form.houseDetails.rentCycleCode,
+      rentUnitPrice: form.houseDetails.rentUnitPrice,
+      houseImages: form.houseDetails.houseImages,
+      gasMeter: form.houseDetails.gasMeter, //房屋图片
+      cableTVMeter: form.houseDetails.cableTVMeter, //房屋图片
+      propertyPhone: form.houseDetails.propertyPhone, //房屋图片
+      manageDeptPhone: form.houseDetails.manageDeptPhone, //房屋图片
+      intelligentDeptPhone: form.houseDetails.intelligentDeptPhone, //房屋图片
+    }
+  }
+  console.log(data)
+
   return http({
     method: 'post',
     url: "/house/update",
-    data: {
-      id: form.id,
-      createTime: form.createTime,
-      updateTime: form.updateTime,
-      isDeleted: form.isDeleted,
-      status: form.status,
-      roomNumber: form.roomNumber,
-      houseEstate: form.houseEstate,
-      propertyNatureCode: form.propertyNature,
-      cityCode: form.cityCode,
-      regionCode: form.regionCode,
-      unit: form.unit,
-      communityCode: form.communityCode,
-      allArea: form.allArea,
-      actualArea: form.actualArea,
-      shareArea: form.shareArea,
-      bedroomNum: form.bedroomNum,
-      parlorNum: form.parlorNum,
-      toiletNum: form.toiletNum,
-      propertyOwner: form.propertyOwner,
-      certificateTitle: form.certificateTitle,
-      // cityName: cityName,
-      // regionName: regionCode,
-      // communityName: communityName,
-      houseDetails: {
-        id: form.houseId,
-        createTime: form.createTime,
-        updateTime: form.updateTime,
-        isDeleted: form.isDeleted,
-        status: form.status,
-        houseId: form.id,
-        roomNum: form.roomNumber,
-        roomAreas: form.roomAreas,
-        waterMeter: form.waterMeter,
-        electricMeter: form.electricMeter,
-        broadbandMeter: form.broadbandMeter,
-        rentCycleCode: form.rentCycleCode,
-        rentUnitPrice: form.rentUnitPrice,
-        houseImages: form.houseImages,
-      }
-    }
+    data: data
   })
 }
 //新增住房申请 
@@ -139,7 +148,7 @@ export function addHouseSubmit(
     ExistPurchase: data.existPurchase,
     OrganizationLife: data.organizationLife,
     MarriageCode: data.marriageCode,
-    MarriageProve: data.marriageProve,
+    annex: data.annex,
     Explains: data.explains,
     Notes: data.notes,
     CustomsType: data.customsType,
@@ -169,7 +178,7 @@ export function addHouseSubmit(
       "existPurchase": from.ExistPurchase,
       "organizationLife": from.OrganizationLife,
       "marriageCode": from.MarriageCode,
-      "marriageProve": from.MarriageProve,
+      "annex": from.annex,
       "explains": from.Explains,
       "notes": from.Notes,
       "customsType": from.CustomsType,

@@ -467,7 +467,16 @@
                 },
               ]"
             >
-              <el-input v-model="formlist.earnestMoney">
+              <el-input
+                v-model="formlist.earnestMoney"
+                @change="
+                  (value) => {
+                    if (formlist.earnestMoney) {
+                      $message.warning('履约保证金不能超过10%');
+                    }
+                  }
+                "
+              >
                 <i slot="suffix" style="font-size: 12px">%</i></el-input
               >
             </el-form-item>
@@ -538,6 +547,19 @@
             </el-form-item>
           </div>
           <div class="formitem">
+            <el-form-item
+              v-if="formlist.procureWay == 0"
+              label="委托采购单位"
+              prop="purchaseUnit"
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入委托采购单位',
+                },
+              ]"
+            >
+              <el-input v-model="formlist.purchaseUnit"></el-input>
+            </el-form-item>
             <el-form-item
               label="部门审批人"
               prop="nestExaminUser"
@@ -729,9 +751,14 @@
             </el-form-item>
           </div>
           <div class="formitem">
+            <el-form-item label="委托采购单位">
+              <el-input v-model="detilelist.purchaseUnit"></el-input>
+            </el-form-item>
             <el-form-item label="合同编号" v-if="detilelist.contractNum">
               <el-input v-model="detilelist.contractNum"></el-input>
             </el-form-item>
+          </div>
+          <div class="formitem">
             <el-form-item label="项目编号" v-if="detilelist.projectNum">
               <el-input v-model="detilelist.projectNum"></el-input>
             </el-form-item>
@@ -876,6 +903,7 @@ export default {
         budgetAmount: "",
         earnestMoney: "",
         afterService: "",
+        purchaseUnit: "",
         paymentType: "",
         demandDepartment: this.$store.state.userinfo.userdepartment,
         contractNum: "",

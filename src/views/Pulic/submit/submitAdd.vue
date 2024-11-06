@@ -490,13 +490,12 @@
             </el-form-item>
           </div>
         </div>
-        <div class="form" v-if="houseForm.isMerry !== '0'">
-          <div class="slot">婚姻证明:</div>
+        <div class="form">
+          <div class="slot">附件:</div>
           <div class="uploadimg" style="height: 130px">
             <el-upload
               action="http"
               list-type="picture-card"
-              accept=".jpg ,.png, .pfd, .svg"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
               :http-request="handleimgup"
@@ -657,7 +656,7 @@ export default {
             type: "2",
           },
         ],
-        hasMerry: "",
+        annex: "",
         sumbitIssus: "",
         issus: "",
         customsType: [],
@@ -697,6 +696,7 @@ export default {
       },
       deptUser: [],
       sexList: [],
+      imgUrl: [],
     };
   },
   methods: {
@@ -776,6 +776,14 @@ export default {
     //删除上交图片
     handleRemove(file, fileList) {
       console.log(file, fileList);
+      this.imgUrl.map((item, index) => {
+        if (item.indexOf(file.name) != -1) {
+          this.imgUrl.splice(index, 1);
+        }
+      });
+
+      this.houseForm.annex = this.imgUrl.join(",");
+      console.log(this.imgUrl, this.houseForm.annex);
     },
     //预览上交图片
     handlePictureCardPreview(file) {
@@ -784,7 +792,6 @@ export default {
     },
     //图片提交
     handleimgup(data) {
-      const url = [];
       const imgData = data.file;
       console.log(imgData);
       const form = new FormData();
@@ -796,8 +803,9 @@ export default {
         header: { "content-type": "multipart/form-data;" },
       })
         .then((res) => {
-          url.push(res.data);
-          this.houseForm.hasMerry = url.join(",");
+          this.imgUrl.push(res.data);
+          this.houseForm.annex = this.imgUrl.join(",");
+          console.log(this.houseForm.annex);
           const message = res.msg;
           this.$notify({
             title: "成功",
@@ -869,7 +877,7 @@ export default {
         existPurchase: this.houseForm.hasBaseHouseValue,
         organizationLife: this.houseForm.jobYears,
         marriageCode: this.houseForm.isMerry,
-        marriageProve: this.houseForm.hasMerry,
+        annex: this.houseForm.annex,
         explains: this.houseForm.sumbitIssus,
         notes: this.houseForm.issus,
         customsType: this.houseForm.customsValue,

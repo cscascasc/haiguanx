@@ -368,7 +368,6 @@
             >
               <el-input
                 v-model="formList.water"
-                type="number"
                 placeholder="请输入数字"
               ></el-input>
             </el-form-item>
@@ -384,7 +383,6 @@
             >
               <el-input
                 v-model="formList.ele"
-                type="number"
                 placeholder="请输入数字"
               ></el-input>
             </el-form-item>
@@ -404,8 +402,94 @@
             >
               <el-input
                 v-model="formList.intnet"
-                type="number"
                 placeholder="请输入数字"
+              ></el-input>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form">
+          <div class="formitem">
+            <el-form-item
+              label="燃气："
+              prop="gasMeter"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入燃气',
+                },
+              ]"
+            >
+              <el-input
+                v-model="formList.gasMeter"
+                placeholder="请输入数字"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="有线电视："
+              prop="cableTVMeter"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入有线电视',
+                },
+              ]"
+            >
+              <el-input
+                v-model="formList.cableTVMeter"
+                placeholder="请输入数字"
+              ></el-input>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form">
+          <div class="formitem">
+            <el-form-item
+              label="物业联系电话："
+              prop="propertyPhone"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入物业联系电话',
+                },
+              ]"
+            >
+              <el-input
+                v-model="formList.propertyPhone"
+                placeholder="请输入物业联系电话"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="管理部门联系电话："
+              prop="manageDeptPhone"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入管理部门联系电话',
+                },
+              ]"
+            >
+              <el-input
+                v-model="formList.manageDeptPhone"
+                placeholder="请输入管理部门联系电话"
+              ></el-input>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form">
+          <div class="formitem">
+            <el-form-item
+              label="智能部门联系电话："
+              prop="intelligentDeptPhone"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入智能部门联系电话',
+                },
+              ]"
+            >
+              <el-input
+                v-model="formList.intelligentDeptPhone"
+                placeholder="请输入智能部门联系电话"
               ></el-input>
             </el-form-item>
           </div>
@@ -534,6 +618,11 @@ export default {
         publicMoney: "", //租金信息
         payValue: "2", //租金类别
         img: "",
+        gasMeter: "",
+        cableTVMeter: "",
+        propertyPhone: "",
+        manageDeptPhone: "",
+        intelligentDeptPhone: "",
         dialogImageUrl: "http://192.168.2.176:9601/file/upload",
         dialogVisible: false,
       },
@@ -662,56 +751,38 @@ export default {
         roomstate.push(this.formList.roomState[i].value);
       }
       console.log(roomstate);
-      const RoomNumber = this.formList.huoseName; //房间号
-      const HouseEstate = this.formList.streeName; //小区
-      const PropertyNature = this.formList.houseValue; // 房间属性
-      const CityCode = this.formList.cityValue; // 县市
-      const RegionCode = this.formList.countyValue; //区县
-      const CommunityCode = this.formList.twonValue; //街道
-      const Unit = this.formList.state; //楼栋
-      const AllArea = this.formList.houseState; // 房屋面积
-      const ActualArea = this.formList.factState; // 实际使用面积
-      const ShareArea = this.formList.pulicState; //公摊使用面积
-      const BedroomNumm = this.formList.roomValue; //卧室数
-      const ParlorNum = this.formList.livingValue; //客厅数
-      const ToiletNum = this.formList.washValue; //厕所数
-      const PropertyOwner = this.formList.canquanman; //产权人
-      const CertificateTitle = this.formList.fangchanzhen; //房产证
-      const Noties = this.formList.beizhu; //备注
-      const RoomNum = this.formList.roomValue; //卧室数
-      const WaterMeter = this.formList.water; //水表号
-      const ElectricMeter = this.formList.ele; //电表号
-      const BroadbandMeter = this.formList.intnet; //宽带号
-      const RentCycleCode = this.formList.payValue; //租金周期
-      const RentUnitPrice = this.formList.houseMoney; //租金
-      const HouseImages = this.formList.img; //房屋图片
-      const roomAreas = roomstate; //卧室面积
-      addHouse(
-        RoomNumber,
-        HouseEstate,
-        PropertyNature,
-        CityCode,
-        RegionCode,
-        CommunityCode,
-        Unit,
-        AllArea,
-        ActualArea,
-        ShareArea,
-        BedroomNumm,
-        ParlorNum,
-        ToiletNum,
-        PropertyOwner,
-        CertificateTitle,
-        Noties,
-        RoomNum,
-        WaterMeter,
-        ElectricMeter,
-        BroadbandMeter,
-        RentCycleCode,
-        RentUnitPrice,
-        HouseImages,
-        roomAreas
-      )
+
+      const data = {
+        RoomNumber: this.formList.huoseName, //房间号
+        HouseEstate: this.formList.streeName, //小区
+        PropertyNature: this.formList.houseValue, // 房间属性
+        CityCode: this.formList.cityValue, // 县市
+        RegionCode: this.formList.countyValue, //区县
+        CommunityCode: this.formList.twonValue, //街道
+        Unit: this.formList.state, //楼栋
+        AllArea: this.formList.houseState, // 房屋面积
+        ActualArea: this.formList.factState, // 实际使用面积
+        ShareArea: this.formList.pulicState, //公摊使用面积
+        BedroomNumm: this.formList.roomValue, //卧室数
+        ParlorNum: this.formList.livingValue, //客厅数
+        ToiletNum: this.formList.washValue, //厕所数
+        PropertyOwner: this.formList.canquanman, //产权人
+        CertificateTitle: this.formList.fangchanzhen, //房产证
+        Noties: this.formList.beizhu, //备注
+        RoomNum: this.formList.roomValue, //卧室数
+        WaterMeter: this.formList.water, //水表号
+        ElectricMeter: this.formList.ele, //电表号
+        BroadbandMeter: this.formList.intnet, //宽带号
+        RentCycleCode: this.formList.payValue, //租金周期
+        RentUnitPrice: this.formList.houseMoney, //租金
+        gasMeter: this.formList.gasMeter, //燃气
+        cableTVMeter: this.formList.cableTVMeter, //有线电视
+        propertyPhone: this.formList.propertyPhone, //物业电话
+        manageDeptPhone: this.formList.manageDeptPhone, //管理员电话
+        intelligentDeptPhone: this.formList.intelligentDeptPhone, //智能部门电话
+        roomAreas: roomstate, //卧室面积
+      };
+      addHouse(data)
         .then((res) => {
           const message = res.msg;
           this.$notify({

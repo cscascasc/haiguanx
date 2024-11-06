@@ -101,10 +101,15 @@
           </el-form-item>
         </div>
         <div class="formitem">
-          <el-form-item label="合同编号">
+          <el-form-item label="委托采购单位">
+            <el-input v-model="detilelist.purchaseUnit"></el-input>
+          </el-form-item>
+          <el-form-item label="合同编号" v-if="detilelist.contractNum">
             <el-input v-model="detilelist.contractNum"></el-input>
           </el-form-item>
-          <el-form-item label="项目编号">
+        </div>
+        <div class="formitem">
+          <el-form-item label="项目编号" v-if="detilelist.projectNum">
             <el-input v-model="detilelist.projectNum"></el-input>
           </el-form-item>
         </div>

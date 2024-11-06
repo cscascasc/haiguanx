@@ -94,6 +94,33 @@
               :value="houselist.house.houseDetails.broadbandMeter"
             ></el-input>
           </el-form-item>
+          <el-form-item label="燃气：">
+            <el-input :value="houselist.house.houseDetails.gasMeter"></el-input>
+          </el-form-item>
+        </div>
+        <div class="formitem">
+          <el-form-item label="有线电视：">
+            <el-input
+              :value="houselist.house.houseDetails.cableTVMeter"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="物业联系电话：">
+            <el-input
+              :value="houselist.house.houseDetails.propertyPhone"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="formitem">
+          <el-form-item label="管理部门联系电话：">
+            <el-input
+              :value="houselist.house.houseDetails.manageDeptPhone"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="智能部门联系电话：">
+            <el-input
+              :value="houselist.house.houseDetails.intelligentDeptPhone"
+            ></el-input>
+          </el-form-item>
         </div>
         <div class="solt">房屋资产</div>
         <el-table border :data="assislist">
@@ -182,12 +209,7 @@
             width: '100%',
           }"
         >
-          <el-table
-            border
-            v-if="this.houselist.marriageCode !== 0"
-            :data="this.houselist.marriageProveList"
-            style="width: 200px"
-          >
+          <el-table border :data="this.houselist.annexList" style="width: 200px">
             <el-table-column label="附件">
               <div slot-scope="scope">
                 {{ slice(scope.row) }}

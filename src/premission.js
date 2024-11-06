@@ -5,7 +5,6 @@ import store from "./store";
 
 router.beforeEach(async (to, form, next) => {
     await store.dispatch('user').then(res => {
-        console.log(store.state)
         if (store.state.userinfo.token === true) {
             if (store.state.permission.routers.length !== 0) {
                 next()
@@ -19,6 +18,8 @@ router.beforeEach(async (to, form, next) => {
                         path: '*',
                         redirect: '/index/one'
                     })
+                    console.log(router.options.routes, 'store.res')
+                    console.log('进入2')
                     next({ ...to, replace: true })
                 })
             }
@@ -27,30 +28,7 @@ router.beforeEach(async (to, form, next) => {
     next()
 })
 
-//  // NProgress Configuration
-// const whiteList = ['/login'] // no redirect whitelist
-// const hasToken = true
-// const hasRoles = true
-// router.beforeEach(async(to, from, next) => {
-//   if (hasToken) {
-//     if (to.path === '/login') {
-//       next({ path: '/' })
-//     } else {
-//       if(hasRoles){
-//         next()
-//       }else{
-//         try {
-//           await store.dispatch('GenerateRoutes').then(res => {
-//             router.addRoute(res[0])
-//             router.options.routes = store.getters.routes
-//             next({ ...to, replace: true })
-//           })
-//         } catch (error) {
-//         }
-//       }
-//     }
-//   }
-// })
+
 
 
 

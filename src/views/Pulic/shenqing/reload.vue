@@ -494,7 +494,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 import http from "@/utils/request";
 import ChineseDistricts from "@/assets/area.js/area";
 import { gethousedetile, getApprodetile } from "@/api/house/gethouselist";

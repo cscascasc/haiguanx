@@ -1447,6 +1447,91 @@
                     {{ this.scopeRowForm.house.houseDetails.broadbandMeter }}
                   </span>
                 </div>
+                <div
+                  class="item"
+                  style="
+                    width: 50%;
+                    font-size: 16px;
+                    display: flex;
+                    margin-top: 10px;
+                    align-items: center;
+                  "
+                >
+                  <div style="width: 100px">燃气:</div>
+                  <span>
+                    {{ this.scopeRowForm.house.houseDetails.gasMeter || "无" }}
+                  </span>
+                </div>
+                <div
+                  class="item"
+                  style="
+                    width: 50%;
+                    font-size: 16px;
+                    display: flex;
+                    margin-top: 10px;
+                    align-items: center;
+                  "
+                >
+                  <div style="width: 130px">有线电视:</div>
+                  <span>
+                    {{
+                      this.scopeRowForm.house.houseDetails.cableTVMeter || "无"
+                    }}
+                  </span>
+                </div>
+                <div
+                  class="item"
+                  style="
+                    width: 50%;
+                    font-size: 16px;
+                    display: flex;
+                    margin-top: 10px;
+                    align-items: center;
+                  "
+                >
+                  <div style="width: 140px">物业联系电话:</div>
+                  <span>
+                    {{
+                      this.scopeRowForm.house.houseDetails.propertyPhone || "无"
+                    }}
+                  </span>
+                </div>
+                <div
+                  class="item"
+                  style="
+                    width: 50%;
+                    font-size: 16px;
+                    display: flex;
+                    margin-top: 10px;
+                    align-items: center;
+                  "
+                >
+                  <div style="width: 140px">管理部门联系电话:</div>
+                  <span>
+                    {{
+                      this.scopeRowForm.house.houseDetails.manageDeptPhone ||
+                      "无"
+                    }}
+                  </span>
+                </div>
+                <div
+                  class="item"
+                  style="
+                    width: 50%;
+                    font-size: 16px;
+                    display: flex;
+                    margin-top: 10px;
+                    align-items: center;
+                  "
+                >
+                  <div style="width: 140px">智能部门联系电话:</div>
+                  <span>
+                    {{
+                      this.scopeRowForm.house.houseDetails
+                        .intelligentDeptPhone || "无"
+                    }}
+                  </span>
+                </div>
               </div>
               <span style="text-align: left; font-size: 18px; color: #000"
                 >房屋图片</span

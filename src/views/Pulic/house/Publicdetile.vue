@@ -7,13 +7,13 @@
       <div class="title">{{ type === "detile" ? "住房详情" : "住房编辑" }}</div>
     </div>
     <div class="form-container">
-      <el-form :model="formList" ref="formList" v-if="houselist.length !== 0">
+      <el-form :model="houselist" ref="formList" v-if="houselist.length !== 0">
         <div class="solt">基本信息:</div>
         <div class="form">
           <div class="formitem">
             <el-form-item
               label="市/州:"
-              prop="cityValue"
+              prop="cityCode"
               :rules="[
                 {
                   required: true,
@@ -22,9 +22,8 @@
               ]"
             >
               <el-select
-                v-model="formList.cityValue"
+                v-model="houselist.cityCode"
                 @change="changeCity"
-                :placeholder="houselist.cityName"
                 :disabled="type === 'detile' ? true : false"
               >
                 <el-option
@@ -47,9 +46,8 @@
               ]"
             >
               <el-select
-                v-model="formList.countyValue"
+                v-model="houselist.regionCode"
                 @change="changeCounty"
-                :placeholder="houselist.regionName"
                 :disabled="type === 'detile' ? true : false"
               >
                 <el-option
@@ -75,8 +73,7 @@
               ]"
             >
               <el-input
-                v-model="formList.address"
-                :placeholder="houselist.address"
+                v-model="houselist.address"
                 :disabled="type === 'detile' ? true : false"
               >
                 <!-- <el-option
@@ -98,8 +95,7 @@
               ]"
             >
               <el-input
-                :placeholder="houselist.houseEstate"
-                v-model="formList.streeName"
+                v-model="houselist.houseEstate"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -118,8 +114,7 @@
               ]"
             >
               <el-input
-                :placeholder="houselist.unit"
-                v-model="formList.state"
+                v-model="houselist.unit"
                 :disabled="type === 'detile' ? true : false"
               >
               </el-input>
@@ -135,8 +130,7 @@
               ]"
             >
               <el-input
-                :placeholder="houselist.roomNumber"
-                v-model="formList.huoseName"
+                v-model="houselist.roomNumber"
                 :disabled="type === 'detile' ? true : false"
               >
               </el-input>
@@ -156,9 +150,8 @@
               ]"
             >
               <el-input
-                v-model="formList.houseState"
+                v-model="houselist.allArea"
                 type="number"
-                :placeholder="houselist.allArea"
                 :disabled="type === 'detile' ? true : false"
               >
                 <i slot="suffix" style="font-size: 24px">㎡</i>
@@ -175,9 +168,8 @@
               ]"
             >
               <el-input
-                v-model="formList.factState"
+                v-model="houselist.actualArea"
                 type="number"
-                :placeholder="houselist.actualArea"
                 :disabled="type === 'detile' ? true : false"
               >
                 <i slot="suffix" style="font-size: 24px">㎡</i></el-input
@@ -198,8 +190,7 @@
               ]"
             >
               <el-input
-                v-model="formList.pulicState"
-                :placeholder="houselist.shareArea"
+                v-model="houselist.shareArea"
                 type="number"
                 :disabled="type === 'detile' ? true : false"
               >
@@ -217,8 +208,7 @@
               ]"
             >
               <el-select
-                v-model="formList.houseValue"
-                :placeholder="houselist.propertyNature"
+                v-model="houselist.propertyNatureCode"
                 :disabled="type === 'detile' ? true : false"
               >
                 <el-option
@@ -250,7 +240,7 @@
                     :disabled="false"
                   >
                     <el-option
-                      v-for="item in formList.roomNum"
+                      v-for="item in roomNum"
                       :key="item.num"
                       :label="item.num"
                       :value="item.num"
@@ -261,7 +251,7 @@
                 <div class="select-item">
                   <el-select v-model="houselist.parlorNum" :disabled="false">
                     <el-option
-                      v-for="item in formList.livingNum"
+                      v-for="item in livingNum"
                       :key="item.num"
                       :label="item.num"
                       :value="item.num"
@@ -272,7 +262,7 @@
                 <div class="select-item">
                   <el-select v-model="houselist.toiletNum" :disabled="false">
                     <el-option
-                      v-for="item in formList.washNum"
+                      v-for="item in washNum"
                       :key="item.num"
                       :label="item.num"
                       :value="item.num"
@@ -319,8 +309,7 @@
               ]"
             >
               <el-input
-                v-model="formList.canquanman"
-                :placeholder="houselist.propertyOwner"
+                v-model="houselist.propertyOwnern"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -335,8 +324,7 @@
               ]"
             >
               <el-input
-                v-model="formList.fangchanzhen"
-                :placeholder="houselist.certificateTitle"
+                v-model="houselist.certificateTitle"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -356,14 +344,11 @@
               ]"
             >
               <el-select
-                v-model="formList.payValue"
+                v-model="houselist.houseDetails.rentCycleCode"
                 :disabled="type === 'detile' ? true : false"
-                :placeholder="
-                  formList.payNum[houselist.houseDetails.rentCycleCode].num
-                "
               >
                 <el-option
-                  v-for="item in formList.payNum"
+                  v-for="item in payNum"
                   :key="item.num"
                   :label="item.num"
                   :value="item.value"
@@ -382,9 +367,8 @@
               ]"
             >
               <el-input
-                v-model="formList.houseMoney"
+                v-model="houselist.houseDetails.rentUnitPrice"
                 type="number"
-                :placeholder="houselist.houseDetails.rentUnitPrice"
                 :disabled="type === 'detile' ? true : false"
               >
                 <i slot="suffix" style="font-size: 16px">¥/㎡/月</i>
@@ -406,9 +390,7 @@
               ]"
             >
               <el-input
-                v-model="formList.water"
-                type="number"
-                :placeholder="houselist.houseDetails.waterMeter"
+                v-model="houselist.houseDetails.waterMeter"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -423,9 +405,7 @@
               ]"
             >
               <el-input
-                v-model="formList.ele"
-                type="number"
-                :placeholder="houselist.houseDetails.electricMeter"
+                v-model="houselist.houseDetails.electricMeter"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -444,9 +424,94 @@
               ]"
             >
               <el-input
-                v-model="formList.intnet"
-                type="number"
-                :placeholder="houselist.houseDetails.broadbandMeter"
+                v-model="houselist.houseDetails.broadbandMeter"
+                :disabled="type === 'detile' ? true : false"
+              ></el-input>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form">
+          <div class="formitem">
+            <el-form-item
+              label="燃气："
+              prop="gasMeter"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入燃气',
+                },
+              ]"
+            >
+              <el-input
+                v-model="houselist.houseDetails.gasMeter"
+                :disabled="type === 'detile' ? true : false"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="有线电视："
+              prop="cableTVMeter"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入有线电视',
+                },
+              ]"
+            >
+              <el-input
+                v-model="houselist.houseDetails.cableTVMeter"
+                :disabled="type === 'detile' ? true : false"
+              ></el-input>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form">
+          <div class="formitem">
+            <el-form-item
+              label="物业联系电话："
+              prop="propertyPhone"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入物业联系电话',
+                },
+              ]"
+            >
+              <el-input
+                v-model="houselist.houseDetails.propertyPhone"
+                :disabled="type === 'detile' ? true : false"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              label="管理部门联系电话："
+              prop="manageDeptPhone"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入管理部门联系电话',
+                },
+              ]"
+            >
+              <el-input
+                v-model="houselist.houseDetails.manageDeptPhone"
+                :disabled="type === 'detile' ? true : false"
+              ></el-input>
+            </el-form-item>
+          </div>
+        </div>
+        <div class="form">
+          <div class="formitem">
+            <el-form-item
+              label="智能部门联系电话："
+              prop="intelligentDeptPhone"
+              :rules="[
+                {
+                  required: false,
+                  message: '请输入智能部门联系电话',
+                },
+              ]"
+            >
+              <el-input
+                v-model="houselist.houseDetails.intelligentDeptPhone"
                 :disabled="type === 'detile' ? true : false"
               ></el-input>
             </el-form-item>
@@ -570,40 +635,41 @@ export default {
       id: "",
       type: "",
       centerDialogVisible: false,
+      roomNum: [
+        { num: "1" },
+        { num: "2" },
+        { num: "3" },
+        { num: "4" },
+        { num: "5" },
+        { num: "6" },
+      ],
+      livingNum: [
+        { num: "1" },
+        { num: "2" },
+        { num: "3" },
+        { num: "4" },
+        { num: "5" },
+        { num: "6" },
+      ],
+
+      washNum: [
+        { num: "1" },
+        { num: "2" },
+        { num: "3" },
+        { num: "4" },
+        { num: "5" },
+        { num: "6" },
+      ],
+      payNum: [
+        { num: "月", value: 1 },
+        { num: "季", value: 2 },
+        { num: "年", value: 3 },
+      ],
       formList: {
         areaList: [],
         countyParams: [],
         townParams: [],
         houseStyle: [],
-        roomNum: [
-          { num: "1" },
-          { num: "2" },
-          { num: "3" },
-          { num: "4" },
-          { num: "5" },
-          { num: "6" },
-        ],
-        livingNum: [
-          { num: "1" },
-          { num: "2" },
-          { num: "3" },
-          { num: "4" },
-          { num: "5" },
-          { num: "6" },
-        ],
-        washNum: [
-          { num: "1" },
-          { num: "2" },
-          { num: "3" },
-          { num: "4" },
-          { num: "5" },
-          { num: "6" },
-        ],
-        payNum: [
-          { num: "月", value: "1" },
-          { num: "季", value: "2" },
-          { num: "年", value: "3" },
-        ],
         streeName: null, //房间名
         huoseName: null, //房号
         state: null, //楼道
@@ -629,6 +695,11 @@ export default {
         publicMoney: null, //租金信息
         payValue: null, //租金类别
         img: null,
+        gasMeter: "",
+        cableTVMeter: "",
+        propertyPhone: "",
+        manageDeptPhone: "",
+        intelligentDeptPhone: "",
         dialogImageUrl: "http://192.168.2.176:9601/file/upload",
         dialogVisible: false,
       },
@@ -653,11 +724,13 @@ export default {
         for (var i = 0; i < length; i++) {
           this.formList.areaList.push(list[i]);
         }
+        this.gethouse();
       });
       getdict("property_nature").then((res) => {
         const list = res.data.records;
         const length = list.length;
         for (var i = 0; i < length; i++) {
+          list[i].dictValue = Number(list[i].dictValue);
           this.formList.houseStyle.push(list[i]);
         }
       });
@@ -684,12 +757,14 @@ export default {
       this.formList.dialogVisible = true;
     },
     changeCity(value) {
-      for (var i = 0; i < this.formList.areaList.length; i++) {
-        var countyList = this.formList.areaList[i];
-        if (value === countyList.id) {
-          this.formList.countyParams = countyList.children;
+      console.log(value, this.formList.areaList, "value");
+      this.formList.countyParams = [];
+      this.formList.areaList.map((item) => {
+        console.log(item, "item");
+        if (value == item.cityCode) {
+          this.formList.countyParams = item.children;
         }
-      }
+      });
     },
     changeCounty(value) {
       for (var i = 0; i < this.formList.countyParams.length; i++) {
@@ -756,83 +831,10 @@ export default {
       for (var i = 0; i < this.formList.roomState.length; i++) {
         roomstate.push(this.formList.roomState[i].value);
       }
-      const list = {
-        id: this.houselist.id,
-        createTime: this.houselist.createTime,
-        updateTime: this.houselist.updateTime,
-        isDeleted: this.houselist.isDeleted,
-        status: this.houselist.status,
-        roomNumber: this.formList.huoseName
-          ? this.formList.huoseName
-          : this.houselist.roomNumber,
-        houseEstate: this.formList.streeName
-          ? this.formList.streeName
-          : this.houselist.houseEstate,
-        propertyNature: this.formList.houseValue
-          ? this.formList.houseValue
-          : this.houselist.propertyNatureCode,
-        cityCode: !this.formList.cityValue
-          ? this.houselist.cityCode
-          : this.formList.cityValue,
-        regionCode: !this.formList.countyValue
-          ? this.houselist.regionCode
-          : this.formList.countyValue,
-        unit: !this.formList.state ? this.houselist.unit : this.formList.state,
-        communityCode: !this.formList.twonValue
-          ? this.houselist.communityCode
-          : this.formList.twonValue,
-        allArea: !this.formList.houseState
-          ? this.houselist.allArea
-          : this.formList.houseState,
-        actualArea: !this.formList.factState
-          ? this.houselist.actualArea
-          : this.formList.factState,
-        shareArea: !this.formList.pulicState
-          ? this.houselist.shareArea
-          : this.formList.pulicState,
-        bedroomNum: !this.formList.roomValue
-          ? this.houselist.bedroomNum
-          : this.formList.roomValue,
-        parlorNum: !this.formList.livingValue
-          ? this.houselist.parlorNum
-          : this.formList.livingValue,
-        toiletNum: !this.formList.washValue
-          ? this.houselist.toiletNum
-          : this.formList.washValue,
-        propertyOwner: this.formList.canquanman
-          ? this.formList.canquanman
-          : this.houselist.propertyOwner,
-        certificateTitle: this.formList.fangchanzhen
-          ? this.formList.fangchanzhen
-          : this.houselist.certificateTitle,
-        cityName: this.houselist.cityName,
-        regionName: this.houselist.regionName,
-        communityName: this.houselist.communityName,
-        houseId: this.houselist.houseDetails.id,
-        // roomAreas: this.houselist.houseDetails.roomAreas,
-        waterMeter: this.formList.water
-          ? this.formList.water
-          : this.houselist.houseDetails.waterMeter,
-        electricMeter: this.formList.ele
-          ? this.formList.ele
-          : this.houselist.houseDetails.electricMeter,
-        broadbandMeter: this.formList.intnet
-          ? this.formList.intnet
-          : this.houselist.houseDetails.broadbandMeter,
-        rentCycleCode: this.formList.payValue
-          ? this.formList.payValue
-          : this.houselist.houseDetails.rentCycleCode,
-        rentUnitPrice: this.formList.houseMoney
-          ? this.formList.houseMoney
-          : this.houselist.houseDetails.rentUnitPrice,
-        houseImages: this.formList.img
-          ? this.formList.img
-          : this.houselist.houseDetails.houseImages,
-        roomAreas: roomstate.join(","),
-      };
-      console.log(list);
-      // return;
-      editHouse(list)
+      this.houselist.houseDetails.roomAreas = roomstate.join(",");
+      console.log(this.houselist);
+
+      editHouse(this.houselist)
         .then((res) => {
           const message = res.msg;
           this.$notify({
@@ -910,27 +912,21 @@ export default {
               label: index + 1 + "室面积",
             });
           });
-          console.log(this.formList);
+
+          if (this.houselist.cityCode) {
+            console.log(this.houselist.cityCode);
+            this.changeCity(this.houselist.cityCode);
+          }
         })
         .catch((error) => {
           console.error(error);
         });
-      // gethouseAsset(this.id)
-      //   .then((res) => {
-      //     const list = res.data.records;
-      //     const length = list.length;
-      //     for (var i = 0; i < length; i++) {
-      //       this.assislist.push(list[i]);
-      //     }
-      //     console.log(this.assislist);
-      //   })
-      //   .catch((error) => {
-      //     console.error(error);
-      //   });
     },
   },
   created() {
     this.id = this.$route.query.id;
+    this.type = this.$route.query.type;
+    this.getMap();
   },
   // computed: {
   //   houselist() {
@@ -938,11 +934,7 @@ export default {
   //     return this.houseAll.filter((item) => item.id === this.id);
   //   },
   // },
-  mounted() {
-    this.getMap();
-    this.gethouse();
-    this.type = this.$route.query.type;
-  },
+  mounted() {},
 };
 </script>
 

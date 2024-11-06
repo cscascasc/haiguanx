@@ -26,6 +26,7 @@ import DataAdd from '../views/Data/quetion/DataAdd.vue'
 import Bpmn from '../views/Bpmn.vue'
 import Activti from '../views/activti/activiti.vue'
 import PublicDetile from '../views/Pulic/house/Publicdetile.vue'
+import userList from '../views/userset/userList.vue'
 import Task from '../views/activti/task.vue'
 
 
@@ -42,6 +43,11 @@ export const publicrouter = [
     name: 'bpmn',
     component: Bpmn
   },
+  // {
+  //   path: '/userlist',
+  //   name: 'UserList',
+  //   commponent: userList
+  // },
   //公共路由入口
   {
     path: '/',
@@ -85,6 +91,7 @@ export const publicrouter = [
     path: '*',
     redirect: '/index/one',
   },
+
 ]
 export const ansycrouter = [
   {
@@ -132,6 +139,7 @@ export const ansycrouter = [
   }
 ]
 export const routes = [
+
   {
     path: '/',
     name: 'mian',
@@ -164,14 +172,19 @@ export const routes = [
             name: 'indexfour',
             component: HomeFour,
           },
+
         ]
       },
       {
         path: '/bpmn',
         name: 'bpmn',
         component: Bpmn
-      }
-
+      },
+      // {
+      //   path: '/userlist',
+      //   name: 'UserList',
+      //   commponent: userList
+      // },
     ]
   },
   {
@@ -316,6 +329,11 @@ export const routes = [
         component: PublicObject
       },
       {
+        path: '/myApplication',
+        name: 'myApplication',
+        component: () => import('../views/Pulic/shenqing/myApplication.vue')
+      },
+      {
         path: '/objectadd',
         name: "objectadd",
         component: ObjectAdd
@@ -432,6 +450,11 @@ export const routes = [
         name: 'RoleSetting',
         component: () => import('@/views/userset/rolesetting.vue')
       },
+      // {
+      //   path: '/userlist',
+      //   name: 'UserList',
+      //   commponent: () => import('@/views/userset/userList.vue')
+      // },
       {
         path: '/meunsetting',
         name: 'MeunSetting',
@@ -441,9 +464,9 @@ export const routes = [
         path: '/risksetting',
         name: 'RiskSetting',
         component: () => import('@/views/userset/rulesetting.vue')
-      }
-    ]
+      },
 
+    ]
   },
   {
     path: '/active',
@@ -462,6 +485,7 @@ export const routes = [
       }
     ]
   },
+
   // // 错误路由重定向
   // {
   //   path: '*',

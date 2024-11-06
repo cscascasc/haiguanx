@@ -11,9 +11,10 @@ const permission = {
   },
   mutations: {
     SET_ROUTES: (state, routes) => {
-     
+
       state.addRoutes = routes
       state.routers = publicrouter.concat(routes)
+      console.log(state.routers)
     },
     SET_MEUNROUTES: (state, routes) => {
       const data = filterRouter(routes)
@@ -27,7 +28,7 @@ const permission = {
       return new Promise(resolve => {
         // 向后端请求路由数据
         getUserMeun().then(res => {
-          console.log(res ,'res')
+          console.log(res, 'res')
           const accessedRoutes = filterAsyncRouter(res.data)
           commit('SET_ROUTES', accessedRoutes)
           commit('SET_MEUNROUTES', accessedRoutes)

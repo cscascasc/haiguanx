@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="sub-botton">
-        <el-button type="primary" @click="mySubmit">我的入住申请</el-button>
+        <!-- <el-button type="primary" @click="mySubmit">我的入住申请</el-button> -->
       </div>
     </div>
     <div class="mainContainer">
@@ -60,7 +60,7 @@
             :label="item.lable"
             :name="item.name"
           >
-            <div class="houseContainer">
+            <div class="houseContainer" v-if="activeName != 5">
               <div
                 class="houseBox"
                 v-for="(item, index) in housetypeList"
@@ -713,7 +713,7 @@ export default {
         },
       ],
       apporform: {
-        size: 10,
+        size: 100,
         current: 1,
         applicantId: this.$store.state.userinfo.userID,
       },
@@ -918,6 +918,15 @@ export default {
       });
     },
     detile(data) {
+      this.$router.push({
+        path: "/pulicdtile/",
+        query: {
+          id: data.id,
+          type: "detile",
+        },
+      });
+    },
+    Mydetile(data) {
       this.$router.push({
         path: "/pulicdtile/",
         query: {

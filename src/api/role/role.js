@@ -60,3 +60,20 @@ export function editRole(data) {
         }
     )
 }
+
+// 获取用户绑定角色
+export function getRoleUserList(data) {
+    return http({
+        method: 'get',
+        url: '/user/findRoleUser',
+        params: data
+    })
+}
+// 移出用户
+export function removeUser(data) {
+    return http({
+        method: 'get',
+        url: '/role/removeRoleUser',
+        params: data
+    })
+}

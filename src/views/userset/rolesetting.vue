@@ -68,7 +68,7 @@
               type="small"
               @click="openuserlog(scope.row)"
               :disabled="disabled('role:role:edituser')"
-              >用户分配</el-button
+              >查看用户</el-button
             >
             <el-button
               size="small"
@@ -155,38 +155,23 @@
         <el-button type="primary" @click="routersave">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="用户分配" width="600px" center :visible.sync="adduser">
-      <el-form :model="router">
-        <el-form-item label="选择用户:">
-          <el-cascader
-            v-model="deptValue"
-            :options="dept"
-            :props="props"
-            @change="deptchange"
-            placeholder="请选择部门"
-          ></el-cascader>
-          <el-select
-            v-model="user.users"
-            clearable
-            multiple
-            placeholder="请选择用户"
-            @change="model(item)"
-          >
-            <el-option
-              v-for="item in deptUser"
-              :key="item.name"
-              :label="item.name"
-              :value="item.id"
-            >
-              {{ item.name + item.deptName }}
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="adduser = false">取 消</el-button>
-        <el-button type="primary" @click="usersave">确 定</el-button>
-      </span>
+    <el-dialog
+      width="100%"
+      :visible.sync="adduser"
+      custom-class="userlist"
+      :modal="false"
+      title="查看用户"
+    >
+      <UserList
+        :roleName="roleName"
+        :roleId="roleId"
+        v-if="adduser"
+        @close="
+          () => {
+            adduser = false;
+          }
+        "
+      />
     </el-dialog>
     <el-dialog title="确认删除吗" width="30%" center :visible.sync="delatelog">
       <span slot="footer" class="dialog-footer">
@@ -198,6 +183,7 @@
 </template>
 
 <script>
+import UserList from "./userList.vue";
 import { getAlldept, findDeptUser } from "@/api/dept/getdept";
 import { getrouter } from "@/api/dept/router";
 import {
@@ -211,6 +197,9 @@ import {
 import { Disablebutton } from "@/utils/button";
 export default {
   name: "orderlist",
+  components: {
+    UserList,
+  },
   data() {
     return {
       addrouter: false,
@@ -260,6 +249,8 @@ export default {
         overflow: "hidden",
       },
       total: 0,
+      roleName: "",
+      roleId: "",
     };
   },
   methods: {
@@ -368,8 +359,12 @@ export default {
       }
     },
     openuserlog(row) {
-      this.user.id = row.id;
-      this.adduser = true;
+      console.log(row);
+      this.roleId = row.id;
+      this.roleName = row.roleName;
+      this.$nextTick(() => {
+        this.adduser = true;
+      });
     },
     usersave() {
       console.log(this.user);
@@ -422,7 +417,7 @@ export default {
       getrole(this.data)
         .then((res) => {
           this.rolelist = res.data.records;
-          // for (var i = 0; i < res.data.records.length; i++) {
+          // for (var i = 0; i <script res.data.records.length; i++) {
           //   this.rolelist.push(res.data.records[i]);
           //   this.total = Number(res.data.total);
           // }
@@ -522,6 +517,14 @@ export default {
           width: 140px;
         }
       }
+    }
+  }
+  ::v-deep .userlist {
+    height: 100vh;
+    width: 100%;
+    margin-top: 60px !important ;
+    .el-dialog__body {
+      padding: 0;
     }
   }
 }
