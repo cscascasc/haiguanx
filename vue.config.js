@@ -1,6 +1,14 @@
 const { defineConfig } = require('@vue/cli-service')
+
 module.exports = defineConfig({
-  transpileDependencies: true,
+  transpileDependencies: ['*'],
+  configureWebpack: config => {
+    config.entry.app = ['babel-polyfill', './src/main.js']
+  },
+  chainWebpack: config => {
+    config.entry('main').add('babel-polyfill')
+    config.entry.app = ['babel-polyfill', './src/main.js']
+  },
   devServer: {
     proxy: {
       '/api': {

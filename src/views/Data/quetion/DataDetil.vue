@@ -362,10 +362,7 @@
                   </div>
                 </el-table-column>
               </el-table>
-              <el-button
-                type="success"
-                :disabled="type !== 'edit'"
-                @click="getinarealist"
+              <el-button type="success" :disabled="false" @click="getinarealist"
                 >弱关联内控节点</el-button
               >
             </el-form-item>
@@ -402,10 +399,7 @@
                   </div>
                 </el-table-column>
               </el-table>
-              <el-button
-                type="success"
-                :disabled="type !== 'edit'"
-                @click="getrulelist"
+              <el-button type="success" :disabled="false" @click="getrulelist"
                 >弱关联规章制度节点</el-button
               >
             </el-form-item>

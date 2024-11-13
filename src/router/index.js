@@ -141,13 +141,13 @@ export const ansycrouter = [
 export const routes = [
 
   {
-    path: '/',
+    path: '/', // 首页
     name: 'mian',
     component: HomeView,
     redirect: '/index/one',
     children: [
       {
-        path: '/index',
+        path: '/index',  // 首页
         name: 'index',
         component: Home,
         redirect: '/index/one',
@@ -188,17 +188,17 @@ export const routes = [
     ]
   },
   {
-    path: '/data',
+    path: '/data', // 问题库
     name: 'Data',
     component: HomeView,
     children: [
       {
-        path: '/data',
+        path: '/data', // 问题库
         name: 'data',
         component: Data
       },
       {
-        path: '/datadd',
+        path: '/datadd',  // 问题库新增
         name: 'datadd',
         component: DataAdd,
         meta: {
@@ -206,63 +206,63 @@ export const routes = [
         }
       },
       {
-        path: '/data1',
+        path: '/data1', 
         name: 'Dataone',
         component: DataOne,
         // redirect: '/data1/datasearch',
         children: [
           {
-            path: '/data1/datasearch',
+            path: '/data1/datasearch', // 问题库搜索
             name: 'Datasearch',
             component: DataSearch
           },
           {
-            path: '/data1/datamanage',
+            path: '/data1/datamanage', // 问题库管理
             name: 'datamanage',
             component: DataManage
           }
         ]
       },
       {
-        path: '/data2',
+        path: '/data2', // 内控库
         name: 'data2',
         component: DataTwo,
         redirect: '/control-in',
         children: [
-          {
-            path: '/control-in',
+          { 
+            path: '/control-in',  // 内控库
             name: 'Control-In',
             component: () => import('../views/Data/neikong/Controlin.vue')
           },
           {
-            path: '/control-out',
+            path: '/control-out',  // 内控库
             name: 'Control-Out',
             component: () => import('../views/Data/neikong/ControlOut.vue')
           }
         ]
       },
       {
-        path: '/controladd',
+        path: '/controladd',  // 内控库新增
         name: 'ControlAddin',
         component: () => import('../views/Data/neikong/ControlAddin.vue')
       },
       {
-        path: '/controldetile',
-        name: 'ControlDetile',
+        path: '/controldetile', // 内控库详情
+        name: 'ControlDetile', 
         component: () => import('../views/Data/neikong/Controldetile.vue')
       },
       {
-        path: '/data3',
+        path: '/data3', // 规章制度
         name: 'data3',
         component: DataThree
       },
       {
-        path: '/info',
+        path: '/info', // 资讯库
         name: 'Info',
         component: () => import('@/views/Data/info/audi.vue'),
       },
       {
-        path: '/info_audi_audiadd',
+        path: '/info_audi_audiadd', // 信息
         name: 'AudiAdd',
         component: () => import('../views/Data/info/audiadd.vue')
       },
@@ -292,22 +292,22 @@ export const routes = [
         component: DataSelect
       },
       {
-        path: '/datadetil',
+        path: '/datadetil', 
         name: 'datadetil',
         component: DataDetil
       },
       {
-        path: '/ruledetil',
+        path: '/ruledetil', // 规则库细节
         name: 'Ruledetil',
         component: () => import('@/views/Data/Rule/Ruledetile.vue')
       },
       {
-        path: '/setrules',
+        path: '/setrules',  // 规则库细节
         name: 'SetRules',
         component: () => import('../views/Data/rules/SetRule.vue')
       },
       {
-        path: '/excli',
+        path: '/excli',  // 表格
         name: 'Excli',
         component: () => import('@/views/Data/excli/excli.vue')
       }

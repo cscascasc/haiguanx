@@ -195,7 +195,7 @@
             </el-form-item>
           </div>
           <div class="formitem">
-            <el-form-item label="委托采购单位">
+            <el-form-item label="委托机构" v-if="detilelist.procureWay == 0">
               <el-input v-model="detilelist.purchaseUnit"></el-input>
             </el-form-item>
             <el-form-item label="合同编号" v-if="detilelist.contractNum">

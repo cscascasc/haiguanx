@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -9,6 +10,7 @@ import { decryptlong, encrypt } from "@/utils/jsencrypt";
 Vue.prototype.$jsEncrypt = JsEncrypt//解密
 Vue.config.productionTip = false
 import './premission'
+
 // router.beforeEach((to, from, next) => {
 //   console.log(store.state.userinfo.token)
 //   const hasToken = store.state.userinfo.token

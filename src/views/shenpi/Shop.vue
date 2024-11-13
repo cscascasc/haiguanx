@@ -471,7 +471,7 @@
                 v-model="formlist.earnestMoney"
                 @change="
                   (value) => {
-                    if (formlist.earnestMoney) {
+                    if (formlist.earnestMoney > 10) {
                       $message.warning('履约保证金不能超过10%');
                     }
                   }
@@ -549,12 +549,12 @@
           <div class="formitem">
             <el-form-item
               v-if="formlist.procureWay == 0"
-              label="委托采购单位"
+              label="委托机构"
               prop="purchaseUnit"
               :rules="[
                 {
                   required: true,
-                  message: '请输入委托采购单位',
+                  message: '请输入委托机构',
                 },
               ]"
             >
@@ -751,7 +751,7 @@
             </el-form-item>
           </div>
           <div class="formitem">
-            <el-form-item label="委托采购单位">
+            <el-form-item label="委托机构" v-if="detilelist.procureWay == 0">
               <el-input v-model="detilelist.purchaseUnit"></el-input>
             </el-form-item>
             <el-form-item label="合同编号" v-if="detilelist.contractNum">

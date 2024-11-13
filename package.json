@@ -10,6 +10,7 @@
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^1.0.2",
     "axios": "^1.4.0",
+    "babel-polyfill": "^6.26.0",
     "bpmn-js": "^13.2.2",
     "core-js": "^3.8.3",
     "echarts": "^5.4.2",
@@ -35,6 +36,7 @@
   "browserslist": [
     "> 1%",
     "last 2 versions",
+    "not ie < 11",
     "not dead"
   ]
 }
